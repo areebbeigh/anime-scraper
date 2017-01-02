@@ -6,13 +6,11 @@ import demjson
 from bs4 import BeautifulSoup as bs
 
 QUALITY = ["360p", "720p"][0]   # Select quality
-NUMBER_OF_EPISODES = 31  # Replace with anime's number of episodes
+NUMBER_OF_EPISODES = 24  # Replace with anime's number of episodes
 
 website_base_url = "http://www.animeland.tv/"
-base_path = "dragon-ball-super-episode-{}-english-dubbed"  # Replace with the anime's base path
+base_path = "my-love-story-episode-{}-english-dubbed"  # Replace with the anime's base path and the episode number with {}
 websites = []
-
-video_frame_base = "http://www2.animeland.tv/emb.php?id="
 
 scraper = cfscrape.create_scraper()
 
