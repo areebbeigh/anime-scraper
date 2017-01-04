@@ -1,4 +1,5 @@
 import re
+import json
 
 import cfscrape
 import demjson
@@ -9,7 +10,7 @@ QUALITY = ["360p", "720p"][0]   # Select quality
 NUMBER_OF_EPISODES = 24  # Replace with anime's number of episodes
 
 website_base_url = "http://www.animeland.tv/"
-base_path = "my-love-story-episode-{}-english-dubbed"  # Replace with the anime's base path and the episode number with {}
+base_path = "clannad-episode-{}-english-dubbed"  # Replace with the anime's base path and the episode number with {}
 websites = []
 
 scraper = cfscrape.create_scraper()
@@ -19,6 +20,7 @@ for i in range(1,NUMBER_OF_EPISODES + 1):
 
 downloads = []
 ep_number = 1
+hash_map = {}
 
 for url in websites:
     try:
@@ -38,11 +40,17 @@ for url in websites:
         for src in sources:
             if src["label"] == QUALITY:
                 downloads.append(src["file"])
-                print("Episode", str(ep_number) + ":", src["file"])
+                episode = "Episode " + str(ep_number)
+                download_url = src["file"]
+                print(episode + ":", download_url)
+                hash_map[download_url] = episode
     except:
         print("Failed to get Episode", ep_number)
 
     ep_number += 1
+
+with open("hash_map.json", "w") as f:
+    f.write(json.dumps(hash_map, indent=4, separators=(',', ': ')))
 
 print("Writing download URLs to file")
 

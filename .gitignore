@@ -1,6 +1,7 @@
 # Results
 download_list.txt
 *.mp4
+hash_map.json
 
 # Windows image file caches
 Thumbs.db
