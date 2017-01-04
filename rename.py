@@ -7,4 +7,4 @@ with open("hash_map.json", "r") as f:
 for url in episode_mapping:
     for file_ in os.listdir():
         if url.endswith(file_):
-            os.rename(file_ + ".mp4", episode_mapping[url])
+            os.rename(file_, episode_mapping[url] + ".mp4")
