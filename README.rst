@@ -1,8 +1,7 @@
-animeland-video-scrapper
-========================
+anime-scraper 
+=============
 
-This is a simple webscrapper that extracts the MP4 download URLs from ww2.animeland.tv. I made it because of my love for anime and put it
-on GitHub to share with my IRL friends who are crazy about anime like me.
+This is a simple collection of simple web scrapers that extracts the MP4 download URLs from anime stream/download websites. I made it because of my love for anime and put it on GitHub to share with my IRL friends who are crazy about anime like me.
 
 It doesn't work for all the series on animeland.tv because of the different DOM structure in some of them. It should work for most of them
 though.
@@ -16,7 +15,7 @@ Dependencies
 ------------
 
 - BeautifulSoup
-- cfscrape (because animeland.tv uses CloadFare DDoS protection)
+- cfscrape (for websites using CloadFare DDoS protection)
 - demjson
 
 Additional Info
