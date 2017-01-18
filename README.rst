@@ -22,4 +22,4 @@ Additional Info
 ---------------
 
 | **Developer:** Areeb Beigh <areebbeigh@gmail.com>
-| **GitHub Repo:** https://github.com/areebbeigh/animeland-video-scrapper/
+| **GitHub Repo:** https://github.com/areebbeigh/anime-scraperhttps
