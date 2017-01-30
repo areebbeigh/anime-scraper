@@ -29,7 +29,7 @@ For example in `animeland.tv`:
   base_path = "clannad-episode-{}-english-dubbed"  # Replace with the anime's base path and the episode number with {}
   websites = []
 
-In the snippet above you can see ``NUMBER_OF_EPISODES`` and ``base_path``. These are the values you'll have to change while downloading an anime other than Clannad. The ``base_path`` is the last part of the URL when you open an episode on animeland.tv. Note that you must replace the episode number with ``{}``
+In the snippet above you can see ``NUMBER_OF_EPISODES`` and ``base_path``. These are the values you'll have to change while downloading an anime other than Clannad. The ``base_path`` is the last part of the URL when you open an episode on animeland.tv. Note that you must replace the episode number with ``{}``.
 
 Dependencies
 ------------
