@@ -1,4 +1,4 @@
-# Animeland.tv scraper
+# anime-joy.tv scraper
 import re
 import json
 
