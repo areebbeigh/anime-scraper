@@ -11,10 +11,10 @@ This doesn't download the episodes, it only creates a new text file with the dow
 
 **Note 1:** The files created after running ``prepare_download_list.py`` should not be deleted until you have downloaded the episodes using IDM and then ran the ``rename.py`` script.
 
-**Note 2:** After an update on animeland.tv the site now mostly has all its videos hosted on Google. The scraper can't rename the files anymore. All the videos hosted on Google will be
+**Note 2:** After an update on animeland.tv the site now has some of its videos hosted on Google. The scraper can't rename the files anymore. All the videos hosted on Google will be
 saved as videoplayback.mp4 now.
 
-**Solution:** New scraper for another dubbed anime website coming soon.
+**Solution:** New scraper for another dubbed anime website coming soon. (If you have a good website for dubbed anime where episodes are <= 150 MB and not hosted with the same file name email me)
 
 Usage
 -----
