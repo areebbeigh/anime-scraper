@@ -1,5 +1,7 @@
 # Results
 download_list.txt
+failed.txt
+test.txt
 *.mp4
 hash_map.json
 

@@ -1,6 +1,7 @@
 # anime-joy.tv scraper
 import re
 import json
+import os
 
 import cfscrape
 import demjson
@@ -8,47 +9,60 @@ import demjson
 from bs4 import BeautifulSoup as bs
 
 QUALITY = ["360p", "720p"][0]   # Select quality
-NUMBER_OF_EPISODES = 24  # Replace with anime's number of episodes
+START_EPISODE = 1  # Replace with the episode number to start fetching from
+END_EPISODE = 24  # Replace with the episode number to stop fetching at
 
 website_base_url = "http://anime-joy.tv/watch/"
-base_path = "clannad/{}"  # Replace with the anime's base path and the episode number with {}
-websites = []
+page_url = "http://anime-joy.tv/watch/clannad"  # Replace with the URL to the anime page
+webpages = []
 
 scraper = cfscrape.create_scraper()
+sp = bs(scraper.get(page_url).content, "html.parser")
 
-for i in range(1,NUMBER_OF_EPISODES + 1):
-    websites.append(website_base_url + base_path.format(str(i)))
+episodes_dict = {}
+repisodes_dict = {}
+
+eps_div = sp.find("div", {"class": "episodes"})
+
+for a in eps_div.find_all("a"):
+    episodes_dict[re.search(r"Episode \d+", a.getText()).group()] = a["href"].strip()
+
+for i in range(START_EPISODE, END_EPISODE + 1):
+    webpages.append(episodes_dict["Episode " + str(i)])
+
+# Reverse episodes_dict
+for key in episodes_dict.keys():
+    repisodes_dict[episodes_dict[key]] = key
 
 downloads = []
-ep_number = 1
+failed_downloads = []
 hash_map = {}
 
-for url in websites:
-    try:
-        source = scraper.get(url).content
-        soup = bs(source, "html.parser")
-        scripts = soup.find("div", {"id": "video_container_div"}).find_all("script")
-        for script in scripts:
-            download_url = ""
-            try:
-                download_url = re.search(
-                r"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*.mp4)",
-                str(script)).group()
-            except AttributeError:
-                continue
+for url in webpages:
+    episode = repisodes_dict[url]
+    source = scraper.get(url).content
+    soup = bs(source, "html.parser")
+    scripts = soup.find("div", {"id": "video_container_div"}).find_all("script")
+    for script in scripts:
+        download_url = ""
+        try:
+            download_url = re.search(
+            r"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*.mp4)",
+            str(script)).group()
+        except AttributeError:
+            continue
 
-            if download_url:
-                ep = "Episode " + str(ep_number)
-                print(ep + ": " + download_url)
-                downloads.append(download_url)
-                hash_map[download_url] = ep
-    except:
-        print("Failed to get Episode " + str(ep_number))
-
-    ep_number += 1
+        if download_url:
+            print(episode + ": " + download_url)
+            downloads.append(download_url)
+            hash_map[download_url] = episode
 
 with open("hash_map.json", "w") as f:
     f.write(json.dumps(hash_map, indent=4, separators=(',', ': ')))
+
+with open("failed.txt", "w") as f:
+    for ep in failed_downloads:
+        f.write(ep + "\n")
 
 print("Writing download URLs to file")
 
