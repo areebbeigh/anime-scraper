@@ -13,6 +13,7 @@ This doesn't download the episodes, it only creates a new text file with the dow
 
 **Note 2:** After an update on animeland.tv the site now mostly has all its videos hosted on Google. The scraper can't rename the files anymore. All the videos hosted on Google will be
 saved as videoplayback.mp4 now.
+
 **Solution:** New scraper for another dubbed anime website coming soon.
 
 Usage
