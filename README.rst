@@ -21,18 +21,17 @@ The usage is straight forward. Everything is hard coded in the script. You have 
 - The line in which the variable for number of episodes is set
 - The line in which the name of the anime is set
 
-For example in `animeland.tv`:
+For example in `animejoy.tv`:
 
 ::
 
-  QUALITY = ["360p", "720p"][0]   # Select quality
-  NUMBER_OF_EPISODES = 24  # Replace with anime's number of episodes
+    START_EPISODE = 1  # Replace with the episode number to start fetching from
+    END_EPISODE = 24  # Replace with the episode number to stop fetching at
 
-  website_base_url = "http://www.animeland.tv/"
-  base_path = "clannad-episode-{}-english-dubbed"  # Replace with the anime's base path and the episode number with {}
-  websites = []
+    website_base_url = "http://anime-joy.tv/watch/"
+    page_url = "http://anime-joy.tv/watch/clannad"  # Replace with the URL to the anime page
 
-In the snippet above you can see ``NUMBER_OF_EPISODES`` and ``base_path``. These are the values you'll have to change while downloading an anime other than Clannad. The ``base_path`` is the last part of the URL when you open an episode on animeland.tv. Note that you must replace the episode number with ``{}``.
+In the snippet above you can see ``START_EPISODE``, ``END_EPISODE`` and ``page_url``. These are the values you'll have to change while downloading an anime other than Clannad.
 
 Dependencies
 ------------

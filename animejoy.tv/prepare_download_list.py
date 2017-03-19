@@ -8,7 +8,6 @@ import demjson
 
 from bs4 import BeautifulSoup as bs
 
-QUALITY = ["360p", "720p"][0]   # Select quality
 START_EPISODE = 1  # Replace with the episode number to start fetching from
 END_EPISODE = 24  # Replace with the episode number to stop fetching at
 
