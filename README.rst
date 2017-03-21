@@ -47,8 +47,8 @@ Recommended Sites
 
 Lastly, here's a list of sites I'd recommend to use more often from the list of websites the scraper is currently available for:
 
-- animeland.tv (For dubbed anime)
-- animejoy.tv (For subbed anime)
+- `animeland.tv <http://animeland.tv/>`_ (For dubbed anime)
+- `animejoy.tv <http://animejoy.tv>`_ (For subbed anime)
 
 Additional Info
 ---------------
