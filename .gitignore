@@ -5,6 +5,12 @@ test.txt
 *.mp4
 hash_map.json
 
+# Under dev
+find_missing.py
+ignore
+
+__pycache__
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
