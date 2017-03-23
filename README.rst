@@ -11,17 +11,18 @@ Usage
 -----
 
 ::
+
     python prepare_download_list.py <URL to the anime episode list webpage> -s <start episode> -e <end episode>
 
 Example:
 
 To fetch episodes 10-20 of the anime Clannad:
 
-`python prepare_download_list.py "www3.animeland.tv/dub/clannad" -s 10 -e 20`
+``python prepare_download_list.py "www3.animeland.tv/dub/clannad" -s 10 -e 20``
 
 If you wish to fetch all the episodes skip the --start and --end parameters.
 
-`python prepare_download_list.py "www3.animeland.tv/dub/clannad"`
+``python prepare_download_list.py "www3.animeland.tv/dub/clannad"``
 
 Dependencies
 ------------
