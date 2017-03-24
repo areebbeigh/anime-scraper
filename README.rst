@@ -33,13 +33,17 @@ Dependencies
 - cfscrape (for websites using CloadFare DDoS protection)
 - demjson
 
-Recommended Sites
+Supported Sites
 -----------------
 
-Lastly, here's a list of sites I'd recommend to use more often from the list of websites the scraper is currently available for:
+Here's a list of sites the scraper currently works for:
 
-- `animeland.tv <http://animeland.tv/>`_ (For dubbed anime)
-- `animejoy.tv <http://animejoy.tv>`_ (For subbed anime)
+- `animeland.tv <http://animeland.tv/>`_
+- `animejoy.tv <http://animejoy.tv>`_
+
+Sites that may be added soon:
+
+- `kissanime.ru <http://kissanime.ru/>`_
 
 Additional Info
 ---------------
