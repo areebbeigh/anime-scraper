@@ -27,7 +27,7 @@ def identify_website(url):
 def _get_webpages(episodes_dict, start, end):
     webpages = []
 
-    if start > 0 and end > 0 and end > start:
+    if start > 0 and end > 0:
         for i in range(start, end + 1):
             try:
                 webpages.append(episodes_dict["Episode " + str(i)])

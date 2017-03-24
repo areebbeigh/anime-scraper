@@ -2,6 +2,7 @@
 import os
 import argparse
 import json
+import sys
 
 from src import scraper
 
@@ -14,6 +15,10 @@ args = parser.parse_args()
 
 start = 0 if not args.start else args.start
 end = 0 if not args.end else args.end
+
+if start < 0 or end < 0 or end < start:
+    print("Error: Invalid start and end points")
+    sys.exit()
 
 res = scraper.get_episodes_dictionary(args.url, start, end)
 episodes_dict = res[0]
@@ -43,8 +48,12 @@ response = input("> ")
 if response.lower() in ["y", "yes"]:
     print("\nEnter the path to the location where you want to save the episodes:")
     local_path = input("> ")
+
     while not os.path.isdir(local_path):
         print("The given path is not a directory or it does not exist.")
         local_path = input("> ")
+
+    while local_path[-1] == "\\":
+        local_path = local_path[0:len(local_path)-1]
 
     scraper.add_to_idm(episodes_dict, local_path)
