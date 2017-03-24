@@ -1,6 +1,8 @@
 anime-scraper
 =============
 
+.. image:: banner.png
+
 This is a simple collection of simple web scrapers that extracts the MP4 download URLs from anime stream/download websites.
 I made it because of my love for anime and put it on GitHub to share with my IRL friends who are crazy about anime like me.
 
