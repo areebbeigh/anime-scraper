@@ -36,11 +36,12 @@ To fetch episodes 10-20 of the anime Clannad:
 
 ``python pdl.py "www3.animeland.tv/dub/clannad" -s 10 -e 20``
 
-If you wish to fetch all the episodes skip the --start and --end parameters.
+To fetch all the episodes skip the --start and --end parameters.
 
 ``python pdl.py "www3.animeland.tv/dub/clannad"``
 
-If you need to fetch only those episodes which are missing from the current directory use the -m argument.
+To fetch only those episodes which are missing from the current directory use the -m argument.
+``python pdl.py "www3.animeland.tv/dub/clannad -m"``
 
 Dependencies
 ------------
