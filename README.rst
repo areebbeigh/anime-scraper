@@ -41,6 +41,7 @@ To fetch all the episodes skip the --start and --end parameters.
 ``python pdl.py "www3.animeland.tv/dub/clannad"``
 
 To fetch only those episodes which are missing from the current directory use the -m argument.
+
 ``python pdl.py "www3.animeland.tv/dub/clannad -m"``
 
 Dependencies
