@@ -20,15 +20,13 @@ Usage
     usage: pdl.py [-h] [--missing] [--start START] [--end END] url
 
     positional arguments:
-    url                   URL to the page of the list of episodes of the anime
+    url                         URL to the page of the list of episodes of the anime
 
     optional arguments:
-    -h, --help            show this help message and exit
-    --missing, -m         Fetch downloads URLs only for episodes not present in
-                        this directory
-    --start START, -s START
-                        The episode number to start fetching from
-    --end END, -e END     The episode number to stop fetching at
+    -h, --help                  Show this help message and exit
+    --missing, -m               Fetch downloads URLs only for episodes not present inthis directory
+    --start START, -s START     The episode number to start fetching from
+    --end END, -e END           The episode number to stop fetching at
 
 Example:
 
