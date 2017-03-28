@@ -9,10 +9,14 @@ I made it because of my love for anime and put it on GitHub to share with my IRL
 This scraper simply fetches the download URLs for the episodes. It can also add the download URLs directly to IDM (using the idman
 command line utility) with the correct episode names.
 
+*Note*: You must add the directory where IDM is installed (C:\Program Files (x86)\Internet Download Manager by default) to your system
+environment variable PATH before trying to use this script to add downloads to IDM.
+
 Usage
 -----
 
 ::
+
     usage: pdl.py [-h] [--missing] [--start START] [--end END] url
 
     positional arguments:
