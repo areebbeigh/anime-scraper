@@ -186,13 +186,3 @@ def get_episodes_dictionary(url, start=0, end=0, find_missing=False):
         return _scrape_episodes(url, start, end, find_missing)
     else:
         raise Exception("Given URL not supported")
-
-
-def add_to_idm(hash_map, local_path):
-    """
-    Uses the IDM comand line utility to add the episode download URLs to the download queue in IDM
-        hash_map: A dictionary with episode download URLs mapped to their names
-    """
-    print("Adding", str(len(hash_map)), "files to IDM main download queue")
-    for url in hash_map:
-        os.system('idman /d "{0}" /p "{1}" /f "{2}" /a'.format(url, local_path, hash_map[url] + ".mp4"))

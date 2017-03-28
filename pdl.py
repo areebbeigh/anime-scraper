@@ -1,10 +1,13 @@
-# Prepare download list
+# pdl - prepare download list
+# Python imports
 import os
 import argparse
 import json
 import sys
 
+# Local imports
 from src import scraper
+from src import idm_utils
 
 parser = argparse.ArgumentParser()
 parser.add_argument("url", help="URL to the page of the list of episodes of the anime")
@@ -50,9 +53,14 @@ with open("hash_map.json", "w") as f:
 print("\nDo you want to add the fetched download URLs to IDM? (Y/N)")
 response = input("> ")
 
+while response.lower() not in ["y", "yes", "n", "no"]:
+    print("Invalid input, try again. Do you want to add the fetched download URLs to IDM? (Y/N)")
+    response = input("> ")
+
 if response.lower() in ["y", "yes"]:
-    print("\nEnter the path to the location where you want to save the episodes:")
+    print("\nEnter the path to the location where you want to save the episodes (Leave blank to use the current directory):")
     local_path = input("> ")
+    local_path = os.getcwd() if local_path == "" else local_path
 
     while not os.path.isdir(local_path):
         print("The given path is not a directory or it does not exist.")
@@ -61,4 +69,5 @@ if response.lower() in ["y", "yes"]:
     while local_path[-1] == "\\":
         local_path = local_path[0:len(local_path)-1]
 
-    scraper.add_to_idm(episodes_dict, local_path)
+    print("Adding", str(len(episodes_dict)), "files to IDM main download queue")
+    idm_utils.add_to_idm(episodes_dict, local_path)
