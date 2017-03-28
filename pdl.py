@@ -8,19 +8,24 @@ from src import scraper
 
 parser = argparse.ArgumentParser()
 parser.add_argument("url", help="URL to the page of the list of episodes of the anime")
+parser.add_argument("--missing", "-m", help="Fetch downloads URLs only for episodes not present in this directory",
+                        action="store_true")
 parser.add_argument("--start", "-s", type=int, help="The episode number to start fetching from")
 parser.add_argument("--end", "-e", type=int, help="The episode number to stop fetching at")
 
 args = parser.parse_args()
 
+url = args.url
 start = 0 if not args.start else args.start
 end = 0 if not args.end else args.end
+
+print("Attempting to fetch episode download URLs from " + url, end="\n\n")
 
 if start < 0 or end < 0 or end < start:
     print("Error: Invalid start and end points")
     sys.exit()
 
-res = scraper.get_episodes_dictionary(args.url, start, end)
+res = scraper.get_episodes_dictionary(url, start, end, args.missing)
 episodes_dict = res[0]
 failed_episodes = res[1]
 

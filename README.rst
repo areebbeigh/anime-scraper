@@ -13,8 +13,18 @@ Usage
 -----
 
 ::
+    usage: pdl.py [-h] [--missing] [--start START] [--end END] url
 
-    python pdl.py <URL to the anime episode list webpage> -s <start episode> -e <end episode>
+    positional arguments:
+    url                   URL to the page of the list of episodes of the anime
+
+    optional arguments:
+    -h, --help            show this help message and exit
+    --missing, -m         Fetch downloads URLs only for episodes not present in
+                        this directory
+    --start START, -s START
+                        The episode number to start fetching from
+    --end END, -e END     The episode number to stop fetching at
 
 Example:
 
@@ -25,6 +35,8 @@ To fetch episodes 10-20 of the anime Clannad:
 If you wish to fetch all the episodes skip the --start and --end parameters.
 
 ``python pdl.py "www3.animeland.tv/dub/clannad"``
+
+If you need to fetch only those episodes which are missing from the current directory use the -m argument.
 
 Dependencies
 ------------

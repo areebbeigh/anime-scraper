@@ -45,11 +45,9 @@ def _get_webpages(episodes_dict, start, end):
     return webpages
 
 
-def _scrape_episodes(url, start, end):
+def _scrape_episodes(url, start, end, find_missing):
     if not (url[:7] == "http://" or url[:8] == "https://"):
         url = "http://" + url
-
-    print("Attempting to fetch episode download URLs from " + url, end="\n\n")
 
     page_url = url
     START_EPISODE = start
@@ -75,7 +73,12 @@ def _scrape_episodes(url, start, end):
             if match:
                 soup = bs(scraper.get(website_base_url + match.group(1)[1:]).content, "html.parser")
                 for a in soup.find_all("a", {"class": "play"}):
-                    episodes_dict[a.getText()] = website_base_url + a["href"][1:]
+                    ep = a.getText()
+                    if find_missing:
+                        if ep not in [os.path.splitext(f)[0] for f in os.listdir()]:
+                            episodes_dict[ep] = website_base_url + a["href"][1:]
+                        continue
+                    episodes_dict[ep] = website_base_url + a["href"][1:]
 
         webpages = _get_webpages(episodes_dict, START_EPISODE, END_EPISODE)
 
@@ -171,7 +174,7 @@ def _scrape_episodes(url, start, end):
 
     return hash_map, failed_episodes
 
-def get_episodes_dictionary(url, start=0, end=0):
+def get_episodes_dictionary(url, start=0, end=0, find_missing=False):
     """
     Returns a dictionary with episode download URLs mapped to their named and a list of episodes that couldn't be fetched.
         start: Episode to start fetching from
@@ -180,7 +183,7 @@ def get_episodes_dictionary(url, start=0, end=0):
     if start < 0 or end < 0:
         raise Exception("Invalid argument(s) for start and/or end")
     if identify_website(url):
-        return _scrape_episodes(url, start, end)
+        return _scrape_episodes(url, start, end, find_missing)
     else:
         raise Exception("Given URL not supported")
 
