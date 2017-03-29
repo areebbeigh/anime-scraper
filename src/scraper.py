@@ -45,6 +45,12 @@ def _get_webpages(episodes_dict, start, end):
     return webpages
 
 
+def _is_episode_missing(ep):
+    if ep not in [os.path.splitext(f)[0] for f in os.listdir()]:
+        return True
+    return False
+
+
 def _scrape_episodes(url, start, end, find_missing):
     if not (url[:7] == "http://" or url[:8] == "https://"):
         url = "http://" + url
@@ -75,7 +81,7 @@ def _scrape_episodes(url, start, end, find_missing):
                 for a in soup.find_all("a", {"class": "play"}):
                     ep = a.getText()
                     if find_missing:
-                        if ep not in [os.path.splitext(f)[0] for f in os.listdir()]:
+                        if _is_episode_missing(ep):
                             episodes_dict[ep] = website_base_url + a["href"][1:]
                         continue
                     episodes_dict[ep] = website_base_url + a["href"][1:]
@@ -139,7 +145,12 @@ def _scrape_episodes(url, start, end, find_missing):
         eps_div = sp.find("div", {"class": "episodes"})
 
         for a in eps_div.find_all("a"):
-            episodes_dict[re.search(r"Episode \d+", a.getText()).group()] = a["href"].strip()
+            ep = re.search(r"Episode \d+", a.getText()).group()
+            if find_missing:
+                if _is_episode_missing(ep):
+                    episodes_dict[ep] = a["href"].strip()
+                continue
+            episodes_dict[ep] = a["href"].strip()
 
         webpages = _get_webpages(episodes_dict, START_EPISODE, END_EPISODE)
 
