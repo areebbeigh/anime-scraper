@@ -1,6 +1,7 @@
 import re
 import os
 import json
+import sys
 
 import cfscrape
 import demjson
@@ -100,12 +101,14 @@ def _scrape_episodes(url, start, end, find_missing):
                 source = scraper.get(url).content
                 soup = bs(source, "html.parser")
                 iframe = soup.find("iframe", {"id": "video"})
-                vid_url = website_base_url + iframe["src"][1:]
+                vid_url = iframe["src"]
+                if vid_url[0] == "/":
+                    vid_url = website_base_url + vid_url[1:]
                 iframe_response = scraper.get(vid_url)
                 iframe_source = iframe_response.content
                 iframe_soup = bs(iframe_source, "html.parser")
                 failed = False
-                # The website has 2 kinds of DOM structures for their videos
+                # The website has 3 kinds of DOM structures for their videos
                 try:
                     # Method 1
                     video = iframe_soup.find("video", {"id": "my-video"})
@@ -121,19 +124,28 @@ def _scrape_episodes(url, start, end, find_missing):
                         sources = sources["sources"]
                         method = 2
                     except:
-                        print("Failed to get " + episode)
-                        failed = True
+                        try:
+                            # Method 3
+                            sources = [{"file": iframe_soup.find("div", {"id": "vid"}).source["src"], "label": QUALITY}]  # Sorry for lying :(
+                            method = 3
+                        except:
+                            #print(sys.exc_info())
+                            print("Failed to get " + episode)
+                            failed = True
                 if not failed:
                     for src in sources:
                         if src["label"] == QUALITY:
                             if method == 1:
                                 download_url = src["src"]
+                            elif method == 2:
+                                download_url = src["file"]
                             else:
                                 download_url = src["file"]
                             downloads.append(download_url)
                             print(episode + ":", download_url, end="\n\n")
                             hash_map[download_url] = episode
             except:
+                #print(sys.exc_info())
                 failed = True
 
             if failed:
