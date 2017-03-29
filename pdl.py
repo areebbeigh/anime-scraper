@@ -58,7 +58,7 @@ while response.lower() not in ["y", "yes", "n", "no"]:
     response = input("> ")
 
 if response.lower() in ["y", "yes"]:
-    print("\nEnter the path to the location where you want to save the episodes (Leave blank to use the current directory):")
+    print("\nEnter the path to the location where you want to save the episodes (Leave blank to use", os.getcwd() + "):")
     local_path = input("> ")
     local_path = os.getcwd() if local_path == "" else local_path
 
