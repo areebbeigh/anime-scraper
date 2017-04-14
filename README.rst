@@ -17,30 +17,36 @@ Usage
 
 ::
 
-    usage: pdl.py [-h] [--missing] [--start START] [--end END] url
+    usage: pdl.py [-h] [--missing] [--auto] [--start START] [--end END] url
 
     positional arguments:
-    url                         URL to the page of the list of episodes of the anime
+      url                   URL to the page of the list of episodes of the anime
 
     optional arguments:
-    -h, --help                  Show this help message and exit
-    --missing, -m               Fetch downloads URLs only for episodes not present inthis directory
-    --start START, -s START     The episode number to start fetching from
-    --end END, -e END           The episode number to stop fetching at
+      -h, --help            show this help message and exit
+      --missing, -m         Fetch downloads URLs only for episodes not present in
+                            this directory
+      --auto, -a            Automatically add the downloads to IDM using the
+                            current directory as the download location
+      --start START, -s START
+                            The episode number to start fetching from
+      --end END, -e END     The episode number to stop fetching at
 
 Example:
 
 To fetch episodes 10-20 of the anime Clannad:
 
-``python pdl.py "www3.animeland.tv/dub/clannad" -s 10 -e 20``
+``python pdl.py www3.animeland.tv/dub/clannad -s 10 -e 20``
 
 To fetch all the episodes skip the --start and --end parameters.
 
-``python pdl.py "www3.animeland.tv/dub/clannad"``
+``python pdl.py www3.animeland.tv/dub/clannad``
 
 To fetch only those episodes which are missing from the current directory use the -m argument.
 
-``python pdl.py "www3.animeland.tv/dub/clannad -m"``
+``python pdl.py www3.animeland.tv/dub/clannad -m``
+
+You could as well add the folder, in which pdl.py is located, to PATH to make it easier to use.
 
 Dependencies
 ------------
