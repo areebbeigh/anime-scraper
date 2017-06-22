@@ -8,16 +8,16 @@ import demjson
 
 from bs4 import BeautifulSoup as bs
 
-ANIMEJOY = "animejoy.tv"
+WATCHANIME = "watchanime.me"
 ANIMELAND = "animeland.tv"
 
 
 def identify_website(url):
-    animejoy = re.compile(r"^(http:\/\/|https:\/\/)*([a-z0-9][a-z0-9\-]*\.)*(animejoy|anime\-joy)\.tv(\/.*)?$")
+    watchanime = re.compile(r"^(http:\/\/|https:\/\/)*([a-z0-9][a-z0-9\-]*\.)*(watchanime)\.me(\/.*)?$")
     animeland = re.compile(r"^(http:\/\/|https:\/\/)*([a-z0-9][a-z0-9\-]*\.)*(animeland)\.tv(\/.*)?$")
 
-    if animejoy.match(url):
-        return ANIMEJOY
+    if watchanime.match(url):
+        return WATCHANIME
 
     if animeland.match(url):
         return ANIMELAND
@@ -69,7 +69,7 @@ def _scrape_episodes(url, start, end, find_missing):
 
     if identify_website(url) == ANIMELAND:
         # Animeland
-        QUALITY = ["360p", "720p"][0]   # Select quality
+        QUALITY = ["360p", "720p"][1]   # Select quality
         website_base_url = "http://www.animeland.tv/"
         source = scraper.get(page_url).content
         soup = bs(source, "html.parser")
@@ -151,13 +151,15 @@ def _scrape_episodes(url, start, end, find_missing):
             if failed:
                 failed_episodes.append(episode)
     else:
-        # Animejoy
-        website_base_url = "http://anime-joy.tv/watch/"
+        # Watchanime
+        QUALITIES = ["360", "480", "720"]
+        QUALITY = QUALITIES[1]  # Select preferred quality
+        website_base_url = "http://watchanime.me/"
         sp = bs(scraper.get(page_url).content, "html.parser")
-        eps_div = sp.find("div", {"class": "episodes"})
+        eps_div = sp.find("div", {"id": "episodes_1-0"})
 
         for a in eps_div.find_all("a"):
-            ep = re.search(r"Episode \d+", a.getText()).group()
+            ep = "Episode " + re.search(r"Ep\. (\d+) \[.+\]", a.getText()).group(1)
             if find_missing:
                 if _is_episode_missing(ep):
                     episodes_dict[ep] = a["href"].strip()
@@ -177,20 +179,23 @@ def _scrape_episodes(url, start, end, find_missing):
                 episode = repisodes_dict[url]
                 source = scraper.get(url).content
                 soup = bs(source, "html.parser")
-                scripts = soup.find("div", {"id": "video_container_div"}).find_all("script")
-                for script in scripts:
-                    download_url = ""
-                    try:
-                        download_url = re.search(
-                        r"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*.mp4)",
-                        str(script)).group()
-                    except AttributeError:
-                        pass  # I know. BAD PRACTISE! DON'T TRY THIS AT HOME!
+                iframe = soup.find("p", {"id": "alternative_1"}).iframe
+                iframe_source = scraper.get(iframe["src"]).content
+                iframe_soup = bs(iframe_source, "html.parser")
+                source = iframe_soup.find("source", {"label": QUALITY})
 
-                    if download_url:
-                        print(episode + ": " + download_url, end="\n\n")
-                        downloads.append(download_url)
-                        hash_map[download_url] = episode
+                # Select which ever quality is available if preferred quality is not available
+                if not source:
+                    for q in QUALITIES:
+                        source = iframe_soup.find("source", {"label": q})
+                        if source:
+                            break
+                download_url = source["src"]
+
+                if download_url:
+                    print(episode + ": " + download_url, end="\n\n")
+                    downloads.append(download_url)
+                    hash_map[download_url] = episode
             except:
                 failed_episodes.append(episode)
                 print("Failed to get", episode)
