@@ -6,10 +6,9 @@ anime-scraper
 This is a simple collection of web scrapers that extract the MP4 download URLs from anime stream/download websites.
 I made it because of my love for anime and put it on GitHub to share with my IRL friends who are crazy about anime like me.
 
-This scraper simply fetches the download URLs for the episodes. It can also add the download URLs directly to IDM (using the idman
-command line utility) with the correct episode names.
+This scraper simply fetches the download URLs for the episodes. It can also add the download URLs directly to IDM (using the idman command line utility) with the correct episode numbers.
 
-**Note**: You must add the directory where IDM is installed (C:\Program Files (x86)\Internet Download Manager by default) to your system
+**Note**: You must add the directory where IDM is installed (C:/Program Files (x86)/Internet Download Manager by default) to your system
 environment variable PATH before trying to use this script to add downloads to IDM.
 
 Usage
