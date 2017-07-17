@@ -3,8 +3,7 @@ anime-scraper
 
 .. image:: banner.png
 
-**Note**: After the latest updates to the site animeland.tv the scraper may not work for many anime on the website. I'll try to fix
-it as soon as I get the time to do so.
+**Note: After the latest updates to the site animeland.tv the scraper may not work for many anime on the website. I'll try to fix it as soon as I get the time to do so.**
 
 This is a simple collection of web scrapers that extract the MP4 download URLs from anime stream/download websites.
 I made it because of my love for anime and put it on GitHub to share with my IRL friends who are crazy about anime like me.
