@@ -46,9 +46,9 @@ with open("download_list.txt", "w") as f:
     for url in episodes_dict:
         f.write(url + "\n")
 
-if failed_episodes:
-    print("\nWriting failed.txt...")
-    with open("failed.txt", "w") as f:
+print("\nWriting failed.txt...")
+with open("failed.txt", "w") as f:
+    if failed_episodes:
         for ep in failed_episodes:
             f.write(ep + "\n")
 

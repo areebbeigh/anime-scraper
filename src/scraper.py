@@ -70,7 +70,7 @@ def _scrape_episodes(url, start, end, find_missing):
 
     if identify_website(url) == ANIMELAND:
         # Animeland
-        QUALITY = ["360p", "720p"][1]   # Select quality
+        QUALITY = ["360p", "480p", "720p"][1]   # Select quality
         website_base_url = "http://www.animeland.tv/"
         source = scraper.get(page_url).content
         soup = bs(source, "html.parser")
@@ -98,21 +98,56 @@ def _scrape_episodes(url, start, end, find_missing):
 
         for url in webpages:
             episode = repisodes_dict[url]
+            failed = False
+
             try:
                 source = scraper.get(url).content
                 soup = bs(source, "html.parser")
                 iframe = soup.find("iframe", {"id": "video"})
-                vid_url = iframe["src"]
-                if vid_url[0] == "/":
-                    vid_url = website_base_url + vid_url[1:]
-                iframe_response = scraper.get(vid_url)
-                iframe_source = iframe_response.content
-                iframe_soup = bs(iframe_source, "html.parser")
-                failed = False
-                # The website has 3 kinds of DOM structures for their videos
+
+                vidurl = iframe["src"]
+                vidurl_source = scraper.get(vidurl).content
+                vidurl_soup = bs(vidurl_source, "html.parser")
+
+                new_player = False
+                for meta in vidurl_soup.find_all("meta"):
+                    if meta.has_attr("http-equiv"):
+                        if meta["http-equiv"].lower() == "refresh":
+                            new_player = True
+                            vidurl = re.search(r'url=(.+)', meta["content"].split(";")[1]).group(1)
+                            vidurl_source = scraper.get(vidurl).content
+                            vidurl_soup = bs(vidurl_source, "html.parser")
+
+                if new_player:
+                    vidjs = vidurl_soup.find_all("script", {"type": "text/javascript"})[1].text.replace("\n", "")
+                else:
+                    vidjs = jsbeautifier.beautify(vidurl_soup.body.find("script", {"type": "text/javascript"}).text.replace("\n", "")).replace("\n", "")
+                sources = demjson.decode("{" + re.search(r'playerInstance\.setup\(.+(sources:.+?\[.+?\])', vidjs).group(1).replace(" ", "") + "}")
+            except:
+                print(sys.exc_info())
+                print("Failed to get " + episode)
+                failed = True
+
+            if not failed:
+                for source in sources["sources"]:
+                    download_url = ""
+                    if source["label"] == QUALITY:
+                        download_url = source["file"]
+
+                if not download_url:
+                    download_url = sources["sources"][0]["file"]  # Sorry ;p
+                downloads.append(download_url)
+                print(episode + ":", download_url, end="\n\n")
+                hash_map[download_url] = episode
+
+            else:
+                failed_episodes.append(episode)
+
+            '''
+            # The website has 3 kinds of DOM structures for their videos
                 try:
                     # Method 1
-                    video = iframe_soup.find("video", {"id": "my-video"})
+                    video = iframe_soup.find("video", {"id": "video"})
                     sources = video.find_all("source")
                     method = 1
                 except:
@@ -132,29 +167,10 @@ def _scrape_episodes(url, start, end, find_missing):
                         except:
                             #print(sys.exc_info())
                             print("Failed to get " + episode)
-                            failed = True
-                if not failed:
-                    for src in sources:
-                        if src["label"] == QUALITY:
-                            if method == 1:
-                                download_url = src["src"]
-                            elif method == 2:
-                                download_url = src["file"]
-                            else:
-                                download_url = src["file"]
-                            downloads.append(download_url)
-                            print(episode + ":", download_url, end="\n\n")
-                            hash_map[download_url] = episode
-            except:
-                #print(sys.exc_info())
-                failed = True
-
-            if failed:
-                failed_episodes.append(episode)
+                            failed = True'''
     else:
         # Watchanime
-        QUALITIES = ["360", "480", "720"]
-        QUALITY = QUALITIES[1]  # Select preferred quality
+        QUALITY = ["360", "480", "720"][1]
         website_base_url = "http://watchanime.me/"
         sp = bs(scraper.get(page_url).content, "html.parser")
         eps_div = sp.find("div", {"id": "episodes_1-0"})
@@ -195,6 +211,7 @@ def _scrape_episodes(url, start, end, find_missing):
                     downloads.append(download_url)
                     hash_map[download_url] = episode
             except:
+                print(sys.exc_info())
                 failed_episodes.append(episode)
                 print("Failed to get", episode)
 
