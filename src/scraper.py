@@ -198,6 +198,7 @@ def _scrape_episodes(url, start, end, find_missing):
             download_url = ""
             try:
                 # Method 1 (YourUpload)
+                # raise ValueError("")  # For when I need only Mp4Upload
                 yourup_iframe_source = scraper.get(soup.find("p", {"id": "alternative_4"}).iframe["src"]).content
                 yourup_soup = bs(yourup_iframe_source, "html.parser")
                 path = yourup_soup.find("div", {"id": "player"}).source["src"]
@@ -206,7 +207,6 @@ def _scrape_episodes(url, start, end, find_missing):
                     raise ValueError("")  # Failing method 1.
             except:
                 try:
-                    print("method 2")
                     # Method 2 (MP4Upload)
                     mp4up_iframe = soup.find("p", {"id": "alternative_2"}).iframe
                     mp4up_iframe_source = scraper.get(mp4up_iframe["src"]).content
