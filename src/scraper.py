@@ -5,6 +5,7 @@ import sys
 
 import cfscrape
 import demjson
+import jsbeautifier
 
 from bs4 import BeautifulSoup as bs
 
@@ -38,7 +39,7 @@ def _get_webpages(episodes_dict, start, end):
         keys = list(episodes_dict.keys())
 
         if re.match(r"^Episode \d+$", keys[0]):
-            keys.sort(key = lambda episode: int(episode.split()[1]))
+            keys.sort(key = lambda episode: episode.split()[1])
 
         for episode in keys:
             webpages.append(episodes_dict[episode])
@@ -159,7 +160,8 @@ def _scrape_episodes(url, start, end, find_missing):
         eps_div = sp.find("div", {"id": "episodes_1-0"})
 
         for a in eps_div.find_all("a"):
-            ep = "Episode " + re.search(r"Ep\. (\d+) \[.+\]", a.getText()).group(1)
+            #print(a.getText())
+            ep = "Episode " + re.search(r"Ep\. (\d+(\.\d+)?) \[.+\]", a.getText()).group(1)
             if find_missing:
                 if _is_episode_missing(ep):
                     episodes_dict[ep] = a["href"].strip()
@@ -173,24 +175,20 @@ def _scrape_episodes(url, start, end, find_missing):
             repisodes_dict[episodes_dict[key]] = key
 
         downloads = []
-
         for url in webpages:
             try:
                 episode = repisodes_dict[url]
                 source = scraper.get(url).content
                 soup = bs(source, "html.parser")
-                iframe = soup.find("p", {"id": "alternative_1"}).iframe
-                iframe_source = scraper.get(iframe["src"]).content
-                iframe_soup = bs(iframe_source, "html.parser")
-                source = iframe_soup.find("source", {"label": QUALITY})
 
-                # Select which ever quality is available if preferred quality is not available
-                if not source:
-                    for q in QUALITIES:
-                        source = iframe_soup.find("source", {"label": q})
-                        if source:
-                            break
-                download_url = source["src"]
+                mp4up_iframe = soup.find("p", {"id": "alternative_2"}).iframe
+                mp4up_iframe_source = scraper.get(mp4up_iframe["src"]).content
+                mp4up_soup = bs(mp4up_iframe_source, "html.parser")
+                mp4up_js = jsbeautifier.beautify(mp4up_soup.body.find("script", {"type": "text/javascript"}).text)
+                with open("js.txt", "w") as f:
+                    f.write(mp4up_js)
+
+                download_url = re.search(r'src:"(.+\.mp4")', mp4up_js).group(1).replace('"', "")
 
                 if download_url:
                     print(episode + ": " + download_url, end="\n\n")
