@@ -70,7 +70,7 @@ def _scrape_episodes(url, start, end, find_missing):
 
     if identify_website(url) == ANIMELAND:
         # Animeland
-        QUALITY = ["360p", "480p", "720p"][1]   # Select quality
+        QUALITY = ["360p", "480p", "720p"][0]   # Select quality
         website_base_url = "http://www.animeland.tv/"
         source = scraper.get(page_url).content
         soup = bs(source, "html.parser")
@@ -192,28 +192,39 @@ def _scrape_episodes(url, start, end, find_missing):
 
         downloads = []
         for url in webpages:
+            episode = repisodes_dict[url]
+            source = scraper.get(url).content
+            soup = bs(source, "html.parser")
+            download_url = ""
             try:
-                episode = repisodes_dict[url]
-                source = scraper.get(url).content
-                soup = bs(source, "html.parser")
-
-                mp4up_iframe = soup.find("p", {"id": "alternative_2"}).iframe
-                mp4up_iframe_source = scraper.get(mp4up_iframe["src"]).content
-                mp4up_soup = bs(mp4up_iframe_source, "html.parser")
-                mp4up_js = jsbeautifier.beautify(mp4up_soup.body.find("script", {"type": "text/javascript"}).text)
-                with open("js.txt", "w") as f:
-                    f.write(mp4up_js)
-
-                download_url = re.search(r'src:"(.+\.mp4")', mp4up_js).group(1).replace('"', "")
-
-                if download_url:
-                    print(episode + ": " + download_url, end="\n\n")
-                    downloads.append(download_url)
-                    hash_map[download_url] = episode
+                # Method 1 (YourUpload)
+                yourup_iframe_source = scraper.get(soup.find("p", {"id": "alternative_4"}).iframe["src"]).content
+                yourup_soup = bs(yourup_iframe_source, "html.parser")
+                path = yourup_soup.find("div", {"id": "player"}).source["src"]
+                download_url = "https://yourupload.com" + path
+                if path.lower() == "undefined":
+                    raise ValueError("")  # Failing method 1.
             except:
-                print(sys.exc_info())
-                failed_episodes.append(episode)
-                print("Failed to get", episode)
+                try:
+                    print("method 2")
+                    # Method 2 (MP4Upload)
+                    mp4up_iframe = soup.find("p", {"id": "alternative_2"}).iframe
+                    mp4up_iframe_source = scraper.get(mp4up_iframe["src"]).content
+                    mp4up_soup = bs(mp4up_iframe_source, "html.parser")
+                    mp4up_js = jsbeautifier.beautify(mp4up_soup.body.find("script", {"type": "text/javascript"}).text)
+                    with open("js.txt", "w") as f:
+                        f.write(mp4up_js)
+
+                    download_url = re.search(r'src:"(.+\.mp4")', mp4up_js).group(1).replace('"', "")
+                except:
+                    print(sys.exc_info())
+                    failed_episodes.append(episode)
+                    print("Failed to get", episode)
+
+            if download_url:
+                print(episode + ": " + download_url, end="\n\n")
+                downloads.append(download_url)
+                hash_map[download_url] = episode
 
     return hash_map, failed_episodes
 
