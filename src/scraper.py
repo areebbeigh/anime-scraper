@@ -212,8 +212,6 @@ def _scrape_episodes(url, start, end, find_missing):
                     mp4up_iframe_source = scraper.get(mp4up_iframe["src"]).content
                     mp4up_soup = bs(mp4up_iframe_source, "html.parser")
                     mp4up_js = jsbeautifier.beautify(mp4up_soup.body.find("script", {"type": "text/javascript"}).text)
-                    with open("js.txt", "w") as f:
-                        f.write(mp4up_js)
 
                     download_url = re.search(r'src:"(.+\.mp4")', mp4up_js).group(1).replace('"', "")
                 except:
