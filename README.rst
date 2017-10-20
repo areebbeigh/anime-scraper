@@ -3,8 +3,9 @@ anime-scraper
 
 .. image:: banner.png
 
-**Update: Latest changes made for watchanime.me**
-**Update: The scraper has been modified according to the latest changes made on WatchAnime.tv and AnimeLand.tv and now works without any problems.**
+**Update: Latest changes made for WatchAnime.me**
+
+**Update: The scraper has been modified according to the latest changes made on WatchAnime.me and AnimeLand.tv and now works without any problems.**
 
 This is a simple collection of web scrapers that extract the MP4 download URLs from anime stream/download websites.
 I made it because of my love for anime and put it on GitHub to share with my IRL friends who are crazy about anime like me.
