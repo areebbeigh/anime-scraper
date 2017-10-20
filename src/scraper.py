@@ -196,24 +196,35 @@ def _scrape_episodes(url, start, end, find_missing):
             source = scraper.get(url).content
             soup = bs(source, "html.parser")
             download_url = ""
+            mp4upload = re.compile(r"^(http:\/\/|https:\/\/)*([a-z0-9][a-z0-9\-]*\.)*(mp4upload)\.com(\/.*)?$")
+            yourupload = re.compile(r"^(http:\/\/|https:\/\/)*([a-z0-9][a-z0-9\-]*\.)*(yourupload)\.com(\/.*)?$")
+            video_frames = soup.find("div", {"class": "autosize-container"}).find_all("iframe")
             try:
+                #print("method 1")
                 # Method 1 (YourUpload)
                 # raise ValueError("")  # For when I need only Mp4Upload
-                yourup_iframe_source = scraper.get(soup.find("p", {"id": "alternative_4"}).iframe["src"]).content
-                yourup_soup = bs(yourup_iframe_source, "html.parser")
-                path = yourup_soup.find("div", {"id": "player"}).source["src"]
-                download_url = "https://yourupload.com" + path
-                if path.lower() == "undefined":
-                    raise ValueError("")  # Failing method 1.
+                for frame in video_frames:
+                    if yourupload.match(frame["src"]):
+                        yourup_iframe_source = scraper.get(frame["src"]).content
+                        yourup_soup = bs(yourup_iframe_source, "html.parser")
+                        path = yourup_soup.find("video", {"id": "player"}).source["src"]
+                        download_url = "https://yourupload.com" + path
+                        print(download_url)
+                        if path.lower() == "undefined":
+                            raise ValueError("")  # Failing method 1.
+                if not download_url:
+                    raise ValueError("")
             except:
+                #print(sys.exc_info())
+                # Method 2 (MP4Upload)
                 try:
-                    # Method 2 (MP4Upload)
-                    mp4up_iframe = soup.find("p", {"id": "alternative_2"}).iframe
-                    mp4up_iframe_source = scraper.get(mp4up_iframe["src"]).content
-                    mp4up_soup = bs(mp4up_iframe_source, "html.parser")
-                    mp4up_js = jsbeautifier.beautify(mp4up_soup.body.find("script", {"type": "text/javascript"}).text)
-
-                    download_url = re.search(r'src:"(.+\.mp4")', mp4up_js).group(1).replace('"', "")
+                    #print("method 2")
+                    for frame in video_frames:
+                        if mp4upload.match(frame["src"]):
+                            mp4up_iframe_source = scraper.get(frame["src"]).content
+                            mp4up_soup = bs(mp4up_iframe_source, "html.parser")
+                            mp4up_js = jsbeautifier.beautify(mp4up_soup.body.find("script", {"type": "text/javascript"}).text)
+                            download_url = re.search(r'src:"(.+\.mp4")', mp4up_js).group(1).replace('"', "")
                 except:
                     print(sys.exc_info())
                     failed_episodes.append(episode)
