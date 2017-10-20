@@ -225,6 +225,9 @@ def _scrape_episodes(url, start, end, find_missing):
                             mp4up_soup = bs(mp4up_iframe_source, "html.parser")
                             mp4up_js = jsbeautifier.beautify(mp4up_soup.body.find("script", {"type": "text/javascript"}).text)
                             download_url = re.search(r'src:"(.+\.mp4")', mp4up_js).group(1).replace('"', "")
+                            #print(download_url, url)
+                    if not download_url:
+                        raise ValueError("")
                 except:
                     print(sys.exc_info())
                     failed_episodes.append(episode)
