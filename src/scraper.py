@@ -32,7 +32,11 @@ def _get_webpages(episodes_dict, start, end):
     if start > 0 and end > 0:
         for i in range(start, end + 1):
             try:
-                webpages.append(episodes_dict["Episode " + str(i)])
+                # Matching episodes
+                for episode in episodes_dict.keys():
+                    ep_index = re.search(r"Episode (\d+)", episode).group(1)
+                    if i == int(ep_index):
+                        webpages.append(episodes_dict["Episode " + ep_index])
             except:
                 print("No Episode " + str(i))
     else:
@@ -202,14 +206,14 @@ def _scrape_episodes(url, start, end, find_missing):
             try:
                 #print("method 1")
                 # Method 1 (YourUpload)
-                # raise ValueError("")  # For when I need only Mp4Upload
+                #raise ValueError("")  # For when I need only Mp4Upload
                 for frame in video_frames:
                     if yourupload.match(frame["src"]):
                         yourup_iframe_source = scraper.get(frame["src"]).content
                         yourup_soup = bs(yourup_iframe_source, "html.parser")
                         path = yourup_soup.find("video", {"id": "player"}).source["src"]
                         download_url = "https://yourupload.com" + path
-                        print(download_url)
+                        #print(download_url)
                         if path.lower() == "undefined":
                             raise ValueError("")  # Failing method 1.
                 if not download_url:
