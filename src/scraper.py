@@ -177,16 +177,23 @@ def _scrape_episodes(url, start, end, find_missing):
         QUALITY = ["360", "480", "720"][1]
         website_base_url = "http://watchanime.me/"
         sp = bs(scraper.get(page_url).content, "html.parser")
-        eps_div = sp.find("div", {"id": "episodes_1-0"})
+        ep_divs = []
+        for div in sp.find_all("div"):
+            try:
+                if re.match(r"episodes_\d+-\d+", div["id"]):
+                    ep_divs.append(div)
+            except KeyError:
+                pass
 
-        for a in eps_div.find_all("a"):
-            #print(a.getText())
-            ep = "Episode " + re.search(r"Ep\. (\d+(\.\d+)?) \[.+\]", a.getText()).group(1)
-            if find_missing:
-                if _is_episode_missing(ep):
-                    episodes_dict[ep] = a["href"].strip()
-                continue
-            episodes_dict[ep] = a["href"].strip()
+        for ep_div in ep_divs:
+            for a in ep_div.find_all("a"):
+                #print(a.getText())
+                ep = "Episode " + re.search(r"Ep\. (\d+(\.\d+)?) \[.+\]", a.getText()).group(1)
+                if find_missing:
+                    if _is_episode_missing(ep):
+                        episodes_dict[ep] = a["href"].strip()
+                    continue
+                episodes_dict[ep] = a["href"].strip()
 
         webpages = _get_webpages(episodes_dict, START_EPISODE, END_EPISODE)
 
