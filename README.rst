@@ -55,7 +55,7 @@ Dependencies
 ------------
 
 - BeautifulSoup
-- cfscrape (for websites using CloadFlare DDoS protection)
+- cfscrape (for websites using CloudFlare DDoS protection)
 - demjson
 - jsbeautifier
 
