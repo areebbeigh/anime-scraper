@@ -219,10 +219,9 @@ def _scrape_episodes(url, start, end, find_missing):
                         yourup_iframe_source = scraper.get(frame["src"]).content
                         yourup_soup = bs(yourup_iframe_source, "html.parser")
                         path = yourup_soup.find("video", {"id": "player"}).source["src"]
-                        download_url = "https://yourupload.com" + path
-                        #print(download_url)
                         if path.lower() == "undefined":
                             raise ValueError("")  # Failing method 1.
+                        download_url = "https://yourupload.com" + path
                 if not download_url:
                     raise ValueError("")
             except:
