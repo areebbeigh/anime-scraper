@@ -1,7 +1,8 @@
 anime-scraper
 =============
 
-.. image:: banner.png
+
+**New version in development: https://github.com/areebbeigh/anime-scraper/tree/v3.0.0**
 
 **Update: Latest changes made for WatchAnime.me**
 
