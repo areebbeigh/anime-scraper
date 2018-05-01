@@ -1,4 +1,0 @@
-beautifulsoup4
-cfscrape
-demjson
-jsbeautifier
