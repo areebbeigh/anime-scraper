@@ -1,3 +1,12 @@
+# virtualenv
+Include
+Lib
+Scripts
+selenium
+tcl
+pip-selfcheck.json
+performance log.txt
+
 # Results
 download_list.txt
 failed.txt
@@ -5,10 +14,7 @@ test.txt
 *.mp4
 hash_map.json
 
-# Under dev
-find_missing.py
-ignore
-
+.vscode
 __pycache__
 
 # Windows image file caches
