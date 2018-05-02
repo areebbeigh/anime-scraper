@@ -12,6 +12,7 @@ from src.stream_servers.openupload import OpenUploadScraper
 from src.stream_servers.mp4upload import Mp4UploadScraper
 from src.stream_servers.yourupload import YourUploadScraper
 from src.utils.timeout import call_till_true
+from src.utils import sort_nicely
 
 
 class Scraper():
@@ -102,9 +103,10 @@ class Scraper():
 
     def fetch_all_episodes(self, episodes_dict):
         # -> { 'Episode 1': { 'stream_page': http://.../watch/episode-01, 'stream_url': http://.../file.mp4 }  }
-        ep_dict = self.episodes_dict
+        episode_names = list(self.episodes_dict.keys())
+        sort_nicely(episode_names)
         
-        for ep_name in ep_dict:
+        for ep_name in episode_names:
             try:
                 episodes_dict[ep_name] = self.fetch_episode(ep_name)
             except ValueError:
