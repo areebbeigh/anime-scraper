@@ -19,6 +19,8 @@ class Scraper():
         self.driver = webdriver
         self.anime_url = url
         self.server = server
+        
+        self.driver.get(self.anime_url)
         self.episodes_dict = self._fetch_episode_list()
         self.server_scraper = self._get_server_scraper()
 
@@ -34,7 +36,6 @@ class Scraper():
         # -> { 'Episode 1': 'https://www.kickassanime.ru/anime/gintama/episode-1', ... }
         print("fetching episode list")
         driver = self.driver
-        driver.get(self.anime_url)
         
         ep_list_container = driver.find_element_by_css_selector(KickassAnimeSelectors.EPISODE_LIST)
 
@@ -43,7 +44,7 @@ class Scraper():
 
         # Sometimes the episode list takes a while to load and we fetch_ep_list gets 0 episodes
         # call_till_true will keep trying for n seconds till we get >0 episodes
-        ep_list, calls, success = call_till_true(fetch_ep_list, 5, ep_list_container)
+        ep_list, calls, success = call_till_true(fetch_ep_list, 10, ep_list_container)
         
         if not success:
             # TODO: Change error raised
@@ -62,13 +63,27 @@ class Scraper():
         return ep_dict
 
     def fetch_metadata(self):
-        # -> { title: _____, synopsis: _____, poster: ____ }
-        pass
+        # TODO: Fetch complete metadata
+        driver = self.driver
+        title = ""
+        description = ""
+        thumbnail = ""
+        
+        if driver.current_url != self.anime_url:
+            driver.get(self.anime_url)
+        
+        img_tags = driver.find_elements_by_css_selector("img")
+
+        for img in img_tags: 
+            if img.get_attribute("itemprop") == "thumbnailUrl":
+                thumbnail = img.get_attribute("src")
+                print(thumbnail)
+                break
+        return { "title": title, "description": description, "thumbnail": thumbnail }
 
     def fetch_episode(self, episode_name):
         # -> { stream_page: http://.../watch/episode-01, stream_url: http://.../file.mp4 } 
-        driver = self.driver
-        #episode_name = "Episode " + str(episode_number)
+
         print("Fetching", episode_name)
 
         if episode_name in self.episodes_dict:
