@@ -1,3 +1,5 @@
+// Not a part of jQuery on-mutate
+
 player_selector = ".load-vid"
 
 function updateLoadStatus(status) {

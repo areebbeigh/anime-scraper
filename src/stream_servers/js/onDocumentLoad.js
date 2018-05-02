@@ -1,3 +1,5 @@
+// Not a part of jQuery on-mutate
+
 function updateLoadStatus(status) {
     load_status = {
         document_loaded: status

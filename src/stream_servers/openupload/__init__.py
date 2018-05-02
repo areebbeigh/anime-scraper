@@ -4,6 +4,7 @@ import time
 
 from selenium.common.exceptions import NoSuchElementException
 
+from src.utils.timeout import call_till_true
 from src.scrape_utils.selectors import LOAD_STATUS_SELECTOR
 from src.scrape_utils.regex import get_stream_url_regex
 from src.scrape_utils.servers import StreamServers
@@ -40,8 +41,8 @@ class OpenUploadScraper(BaseServerScraper):
         # Choose openupload as streaming server
         driver.find_element_by_css_selector(selectors.OPENUPLOAD).click()
         player = driver.find_element_by_css_selector(selectors.PLAYER)
-
-        # TODO: Don't let this run for infinity
+        
+        '''
         while True:
             try:
                 status_raw = driver.find_element_by_css_selector(LOAD_STATUS_SELECTOR).text
@@ -52,8 +53,21 @@ class OpenUploadScraper(BaseServerScraper):
                     break
             except NoSuchElementException as err:
                 print("not there yet " + err.msg)
+        '''
+        
+        def is_iframe_loaded(webdriver):
+            status_raw = webdriver.find_element_by_css_selector(LOAD_STATUS_SELECTOR).text
+            status = json.loads(status_raw)
+            print("waiting")
+            if status["iframe_loaded"]:
+                print("iframe loaded")
+                return True
+            return False
 
-        print("outside loop")
+        res, calls, success = call_till_true(is_iframe_loaded, 10, driver)
+
+        print("outside wait loop ;", "success:", success, "calls:", calls)
+
         frame = player.find_element_by_tag_name("iframe")
 
         # TODO: Find alternative to use time.sleep()
