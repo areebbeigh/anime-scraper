@@ -13,7 +13,7 @@ failed.txt
 test.txt
 *.mp4
 hash_map.json
-
+debug.log
 .vscode
 __pycache__
 
