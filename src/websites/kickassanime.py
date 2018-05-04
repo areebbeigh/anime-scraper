@@ -22,7 +22,8 @@ class Scraper():
         self.server = server
         
         self.driver.get(self.anime_url)
-        self.episodes_dict = self._fetch_episode_list()
+        self.episodes_dict = {}
+        self.episodes_dict = self.fetch_episode_list()
         self.server_scraper = self._get_server_scraper()
 
     def _get_server_scraper(self):
@@ -33,8 +34,11 @@ class Scraper():
         }
         return scrapers[self.server]
     
-    def _fetch_episode_list(self):
+    def fetch_episode_list(self):
         # -> { 'Episode 1': 'https://www.kickassanime.ru/anime/gintama/episode-1', ... }
+        if self.episodes_dict:
+            return self.episodes_dict
+
         print("fetching episode list")
         driver = self.driver
         
