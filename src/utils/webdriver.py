@@ -5,6 +5,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.common.keys import Keys
 
+from . import printd
 from .timeout import call_till_true
 
 # 'Thank you' tabs expected to open from chrome extensions
@@ -61,10 +62,10 @@ def get_chrome_webdriver():
     res, calls, success = call_till_true(tab_count_reached, 5, driver)
     
     if success:
-        print("calls", calls)
+        printd("calls", calls)
         driver.close_extra_tabs()
     else:
-        print("Couldn't kill extra tabs")
+        printd("Couldn't kill extra tabs")
 
     return driver
 

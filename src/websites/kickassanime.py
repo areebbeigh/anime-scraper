@@ -12,7 +12,7 @@ from src.stream_servers.openupload import OpenUploadScraper
 from src.stream_servers.mp4upload import Mp4UploadScraper
 from src.stream_servers.yourupload import YourUploadScraper
 from src.utils.timeout import call_till_true
-from src.utils import sort_nicely
+from src.utils import sort_nicely, printd
 
 
 class Scraper():
@@ -39,7 +39,7 @@ class Scraper():
         if self.episodes_dict:
             return self.episodes_dict
 
-        print("fetching episode list")
+        printd("fetching episode list")
         driver = self.driver
         
         ep_list_container = driver.find_element_by_css_selector(KickassAnimeSelectors.EPISODE_LIST)
@@ -55,16 +55,16 @@ class Scraper():
             # TODO: Change error raised
             raise ValueError("Failed to fetch episode list")
 
-        print("calls", calls)
-        print(ep_list_container.text)
-        print(len(ep_list))
+        printd("calls", calls)
+        # print(ep_list_container.text)
+        # print(len(ep_list))
 
         ep_dict = {}
 
         for ep in ep_list:
             if ep.text:
                 ep_dict[ep.text] = ep.get_attribute("href")
-        print(ep_dict)
+        # print(ep_dict)
         return ep_dict
 
     def fetch_metadata(self):
@@ -82,19 +82,19 @@ class Scraper():
         for img in img_tags: 
             if img.get_attribute("itemprop") == "thumbnailUrl":
                 thumbnail = img.get_attribute("src")
-                print(thumbnail)
+                # print(thumbnail)
                 break
         return { "title": title, "description": description, "thumbnail": thumbnail }
 
     def fetch_episode(self, episode_name):
         # -> { stream_page: http://.../watch/episode-01, stream_url: http://.../file.mp4 } 
 
-        print("Fetching", episode_name)
+        printd("Fetching", episode_name)
 
         if episode_name in self.episodes_dict:
             stream_page = self.episodes_dict[episode_name]
             stream_url = self.server_scraper.fetch_stream_url(stream_page)
-            print({ "stream_page": stream_page, "stream_url": stream_url  })
+            printd({ "stream_page": stream_page, "stream_url": stream_url  })
             return { "stream_page": stream_page, "stream_url": stream_url  }
         
         raise ValueError("%s does not exist" % episode_name)

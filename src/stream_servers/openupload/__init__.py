@@ -4,6 +4,7 @@ import time
 
 from selenium.common.exceptions import NoSuchElementException
 
+from src.utils import printd
 from src.utils.timeout import call_till_true
 from src.scrape_utils.selectors import LOAD_STATUS_SELECTOR
 from src.scrape_utils.regex import get_stream_url_regex
@@ -58,15 +59,15 @@ class OpenUploadScraper(BaseServerScraper):
         def is_iframe_loaded(webdriver):
             status_raw = webdriver.find_element_by_css_selector(LOAD_STATUS_SELECTOR).text
             status = json.loads(status_raw)
-            print("waiting")
+            printd("waiting")
             if status["iframe_loaded"]:
-                print("iframe loaded")
+                printd("iframe loaded")
                 return True
             return False
 
         res, calls, success = call_till_true(is_iframe_loaded, 10, driver)
 
-        print("outside wait loop ;", "success:", success, "calls:", calls)
+        printd("outside wait loop ;", "success:", success, "calls:", calls)
 
         frame = player.find_element_by_tag_name("iframe")
 
