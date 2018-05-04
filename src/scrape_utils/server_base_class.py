@@ -12,7 +12,7 @@ class BaseServerScraper:
         for obj in regex_objects:
             search_result = obj.search(perf_logs)
             if search_result:
-                return search_result.group(0)
+                return search_result.group(0).replace("\"", "").replace("'", "")
         
         return ""
 
