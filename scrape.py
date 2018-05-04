@@ -1,11 +1,15 @@
-import sys
 import os
+import sys
+import json
+import time
+
 from collections import OrderedDict
 
 from argparse import ArgumentParser
 
-from src.websites.kickassanime import Scraper
+from src.utils import sort_nicely
 from src.utils.formatting import extract_episode_number
+from src.websites.kickassanime import Scraper
 from src.utils.webdriver import get_chrome_webdriver
 from src.scrape_utils.servers import StreamServers
 
@@ -14,13 +18,14 @@ from src.scrape_utils.servers import StreamServers
 # Check URL and get matching scraper instance - not needed for now
 # Fetch episodes from prefered server
 # Prepare JSON and simple text files
+start_time = time.time()
 
 parser = ArgumentParser()
 parser.add_argument("url", help="URL to the page of the list of episodes of the anime")
 
 parser.add_argument("--start", "-s", type=int, help="The episode number to start fetching from")
 parser.add_argument("--end", "-e", type=int, help="The episode number to stop fetching at")
-parser.add_argument("--missing", "-m", help="Fetch downloads URLs only for episodes not present in this directory",
+parser.add_argument("--missing", "-m", help="Fetch downloads URLs only for episodes not present in this directory (if =files) or metadata (if =meta)",
                         action="store", default=False)
 
 parser.add_argument("--auto", "-a", help="Automatically add the downloads to IDM using the current directory as the download location",
@@ -38,6 +43,8 @@ scraper = Scraper(driver, url, StreamServers.MP4UPLOAD)
 
 episode_dict = scraper.fetch_episode_list()
 episode_numbers = [extract_episode_number(ep) for ep in episode_dict]
+episode_numbers.sort()
+episode_numbers_to_fetch = []
 
 # Parsing start and end points
 start = args.start
@@ -48,8 +55,6 @@ end_given = False if type(end).__name__ == "NoneType" else True
 if (start_given and start < 0) or (end_given and end < 0) or ((start_given and end_given) and (end < start)):
     print("Error: Invalid start and end points")
     sys.exit()
-
-episode_numbers_to_fetch = []
 
 if start_given and end_given:
     episode_numbers_to_fetch = list(range(start, end+1))
@@ -93,6 +98,11 @@ else:
 
 driver.close()
 
-print(fetched_episodes)
+meta_data = { 
+    "Episodes": fetched_episodes,
+    "Failed": [ep_name for ep_name in fetched_episodes if not fetched_episodes[ep_name]["stream_url"]],
+    "Time taken": str(time.time() - start_time) + " seconds"
+    }
 
-# Output operable data
+with open("metadata.json", "w") as f:
+    f.write(json.dumps(meta_data, indent=4, separators=(',', ': ')))
