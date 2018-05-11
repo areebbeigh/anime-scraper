@@ -112,6 +112,7 @@ for episode_name, value in fetched_episodes.items():
         failed += [episode_name]
         fetched_episodes_final.pop(episode_name)
 
+# Prepare and write metadata
 meta_data = { 
     "Episodes": fetched_episodes_final,
     "Failed": failed,
@@ -121,4 +122,6 @@ meta_data = {
 with open("metadata.json", "w") as f:
     f.write(json.dumps(meta_data, indent=4, separators=(',', ': ')))
 
-# Auto add to downloader
+# Prepare download scripts - Linux
+
+# Add to IDM - Windows
