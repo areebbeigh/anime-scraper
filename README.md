@@ -108,6 +108,8 @@ anime-scraper uses the following additional "resources":
 - [jQuery onMutate](https://github.com/eclecto/jQuery-onMutate) by [electro](https://github.com/eclecto)
 - [Pop Up Blocker](http://www.poperblocker.com/) Chrome extension
 
+Thanks a bunch to the developers.
+
 ## TODO
 - Expand config.py
 - Add support for 2 more sites
