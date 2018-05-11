@@ -97,5 +97,11 @@ To automatically add the downloads to IDM/uGet:
 
 `scrape.py https://www.kickassanime.ru/anime/clannad -s 2 -e 6 -a`
 
+# Not mine
+anime-scraper uses the following additional "resources":
+
+- [jQuery onMutate](https://github.com/eclecto/jQuery-onMutate) by [electro](https://github.com/eclecto)
+- [Pop Up Blocker](http://www.poperblocker.com/) Chrome extension
+
 # Bye Bye
 That's pretty much it. Feel free to contribute by fixing/reporting bugs and/or expanding anime-scraper. Cheers.
