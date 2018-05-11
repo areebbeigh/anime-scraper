@@ -96,8 +96,10 @@ class Scraper():
             
             printd("Fetching", episode_name)
             printing.fetching_episode(episode_name, stream_page)
-
-            stream_url = self.server_scraper.fetch_stream_url(stream_page)
+            try:
+                stream_url = self.server_scraper.fetch_stream_url(stream_page)
+            except:
+                stream_url = ""
             result = { "stream_page": stream_page, "stream_url": stream_url  }
 
             printd(result)
