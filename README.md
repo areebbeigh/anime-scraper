@@ -99,18 +99,18 @@ To automatically add the downloads to IDM/uGet:
 
 Additionally, you can change a very tiny bit (for now) of the configuration in `src/config.py`.
 
-# Supported websites
+## Supported websites
 - kickassanime.ru
 
-# Not mine
+## Not mine
 anime-scraper uses the following additional "resources":
 
 - [jQuery onMutate](https://github.com/eclecto/jQuery-onMutate) by [electro](https://github.com/eclecto)
 - [Pop Up Blocker](http://www.poperblocker.com/) Chrome extension
 
-# TODO
+## TODO
 - Expand config.py
 - Add support for 2 more sites
 
-# Bye Bye
+## Bye Bye
 That's pretty much it. Feel free to contribute by fixing/reporting bugs and/or expanding anime-scraper. Cheers.
