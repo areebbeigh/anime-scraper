@@ -1,4 +1,5 @@
 pdl.py
+*.pyc
 
 # virtualenv
 Include
