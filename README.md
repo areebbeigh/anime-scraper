@@ -55,9 +55,10 @@ sudo chmod +x /usr/bin/chromedriver
 
 ### Windows
 
-1. Download the [Chrome Webdriver](https://sites.google.com/a/chromium.org/chromedriver/downloads).
+1. Download the [Chrome Webdriver](https://sites.google.com/a/chromium.org/chromedriver/downloads)
 2. Place it in `C:/webdrivers` (or where ever you want)
 3. Add `C:/webdrivers` to system environment variable PATH  (# TODO: Make this step optional through config.py)
+4. Make sure your Internet Download Manager installation directory (the one in which idman.exe sits) is added to PATH
 
 ## Usage
 The usage is pretty much the same as the previous version:
