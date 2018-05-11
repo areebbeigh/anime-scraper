@@ -1,10 +1,12 @@
 pdl.py
-scrape.log
 
 # virtualenv
 Include
 Lib
 Scripts
+bin
+include
+lib
 selenium
 tcl
 pip-selfcheck.json
@@ -19,6 +21,8 @@ hash_map.json
 debug.log
 .vscode
 __pycache__
+metadata.json 
+scrape.log
 
 # Windows image file caches
 Thumbs.db
