@@ -19,6 +19,46 @@ If you're still reading, you deserve to know my real motivation behind the rewri
 ## Shiny new stuff
 - Linux support with [uGet Download Manager](http://http://ugetdm.com/) (only cuz I moved to Ubuntu)
 
+## Get it working
+
+`git clone https://github.com/areebbeigh/anime-scraper.git`
+
+`pip install selenium`
+
+### Ubuntu
+
+```
+sudo apt-get update
+sudo apt-get install -y unzip xvfb libxi6 libgconf-2-4
+```
+
+Installing Google Chrome:
+
+```
+sudo curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add
+sudo echo "deb [arch=amd64]  http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
+sudo apt-get -y update
+sudo apt-get -y install google-chrome-stable
+```
+
+Installing and setting up chrome webdriver:
+
+```
+wget https://chromedriver.storage.googleapis.com/2.35/chromedriver_linux64.zip
+unzip chromedriver_linux64.zip
+
+sudo mv chromedriver /usr/bin/chromedriver
+sudo chown root:root /usr/bin/chromedriver
+sudo chmod +x /usr/bin/chromedriver
+```
+
+
+### Windows
+
+1. Download the [Chrome Webdriver](https://sites.google.com/a/chromium.org/chromedriver/downloads).
+2. Place it in `C:/webdrivers` (or where ever you want)
+3. Add `C:/webdrivers` to system environment variable PATH  (# TODO: Make this step optional through config.py)
+
 ## Usage
 The usage is pretty much the same as the previous version:
 
