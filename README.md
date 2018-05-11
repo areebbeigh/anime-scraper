@@ -27,12 +27,14 @@ If you're still reading, you deserve to know my real motivation behind the rewri
 
 ### Ubuntu
 
+1. Installing some packages:
+
 ```
 sudo apt-get update
 sudo apt-get install -y unzip xvfb libxi6 libgconf-2-4
 ```
 
-Installing Google Chrome:
+2. Installing Google Chrome:
 
 ```
 sudo curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add
@@ -41,7 +43,7 @@ sudo apt-get -y update
 sudo apt-get -y install google-chrome-stable
 ```
 
-Installing and setting up chrome webdriver:
+3. Installing and setting up chrome webdriver:
 
 ```
 wget https://chromedriver.storage.googleapis.com/2.35/chromedriver_linux64.zip
@@ -52,6 +54,8 @@ sudo chown root:root /usr/bin/chromedriver
 sudo chmod +x /usr/bin/chromedriver
 ```
 
+4. Finally, add anime-scraper repository directory to PATH. This allows you to run the command `scrape.py` in any directory.
+
 
 ### Windows
 
@@ -59,7 +63,7 @@ sudo chmod +x /usr/bin/chromedriver
 2. Place it in `C:/webdrivers` (or where ever you want)
 3. Add `C:/webdrivers` to system environment variable PATH  (# TODO: Make this step optional through config.py)
 4. Make sure your Internet Download Manager installation directory (the one in which idman.exe sits) is added to PATH or anime-scraper can't add downloads automatically to IDM.
-5. Add anime-scraper repository directory to path. This allows you to run the command `scrape` in any directory.
+5. Add anime-scraper repository directory to PATH. This allows you to run the command `scrape` in any directory.
 
 ## Usage
 The usage is pretty much the same as the previous version:
@@ -87,11 +91,11 @@ So if I wanted to fetch episodes 2, 6 and everything that lies in between for my
 
 `mkdir Clannad ; cd Clannad`  (optional, this is just to keep everything organzed)
 
-`scrape https://www.kickassanime.ru/anime/clannad -s 2 -e 6`
+`scrape.py https://www.kickassanime.ru/anime/clannad -s 2 -e 6`
 
 To automatically add the downloads to IDM/uGet:
 
-`scrape https://www.kickassanime.ru/anime/clannad -s 2 -e 6 -a`
+`scrape.py https://www.kickassanime.ru/anime/clannad -s 2 -e 6 -a`
 
 # Bye Bye
 That's pretty much it. Feel free to contribute by fixing/reporting bugs and/or expanding anime-scraper. Cheers.
