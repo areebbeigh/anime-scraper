@@ -2,11 +2,13 @@ import os
 import sys
 import json
 import time
+import platform
 
 from collections import OrderedDict
 
 from argparse import ArgumentParser
 
+from src.utils.downloader_interface import IDM, uGet
 from src.utils.formatting import extract_episode_number
 from src.utils.webdriver import get_chrome_webdriver
 from src.websites.kickassanime import Scraper
@@ -104,7 +106,7 @@ driver.close()
 
 failed = []
 
-# This dictionary won't contain episodes that we couldn't find a stream url for
+# This dictionary won't contain episodes that we couldn't fetch a stream url for
 fetched_episodes_final = fetched_episodes.copy()
 
 for episode_name, value in fetched_episodes.items():
@@ -122,6 +124,33 @@ meta_data = {
 with open("metadata.json", "w") as f:
     f.write(json.dumps(meta_data, indent=4, separators=(',', ': ')))
 
-# Prepare download scripts - Linux
 
-# Add to IDM - Windows
+
+is_windows = platform.win32_ver()[0]
+is_linux = platform.dist()[0]
+downloader = ""
+
+if is_windows or is_linux:
+    downloader = IDM() if is_windows else uGet()
+
+if not downloader:
+    print("OS not supported for adding downloads.")
+    sys.exit()
+
+skip_auto_add = False
+
+if not is_auto:
+    while True:
+        response = input("Do you want to add fetched episodes to " + str(downloader) + "? " + "[Y/n]")
+        if response.lower() not in ["n", "no", "y", "yes", ""]:
+            continue
+        if response.lower() in ["n", "no"]:
+            skip_auto_add = True
+        break
+
+if not skip_auto_add:
+    print("Adding episodes to", str(downloader))
+
+    for episode_name, urls in meta_data["Episodes"].items():
+        print(os.getcwd(), episode_name, urls["stream_url"])
+        downloader.add_to_queue(os.getcwd(), episode_name, urls["stream_url"])
