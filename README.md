@@ -1,5 +1,5 @@
 # anime-scraper
-Scrape and add anime episode stream URLs to uGet (Linux) or IDM (Windows)
+Scrape and add anime episode stream URLs to uGet (Linux) or IDM (Windows).
 
 ## Motivation for v3
 Let me take a moment to explain the upgrade to v3. If you were a regular user of anime-scraper before (upto any version v2)
@@ -96,6 +96,11 @@ So if I wanted to fetch episodes 2, 6 and everything that lies in between for my
 To automatically add the downloads to IDM/uGet:
 
 `scrape.py https://www.kickassanime.ru/anime/clannad -s 2 -e 6 -a`
+
+Additionally, you can change a very tiny bit (for now) of the configuration in `src/config.py`.
+
+# Supported websites
+- kickassanime.ru
 
 # Not mine
 anime-scraper uses the following additional "resources":
