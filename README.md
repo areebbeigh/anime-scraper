@@ -99,6 +99,11 @@ To automatically add the downloads to IDM/uGet:
 
 Additionally, you can change a very tiny bit (for now) of the configuration in `src/config.py`.
 
+## A few things
+1. If you're not able to scrape episodes of a particular series try changing the stream server
+in the configuration. You can choose an ideal stream server by opening the episodes of the anime in the browser and seeing which stream servers are actually available.
+2. Right now [May 11 2018], anime-scraper doesn't work on the more recent ongoing kickassanime.ru anime. Works for all of the completed anime though.
+
 ## Supported websites
 - kickassanime.ru
 
