@@ -13,6 +13,7 @@ from src.utils.formatting import extract_episode_number
 from src.utils.webdriver import get_chrome_webdriver
 from src.websites.kickassanime import Scraper
 from src.scrape_utils.servers import StreamServers
+from src.config import UserConfig, TimeoutConfig
 
 # TODO: Catch errors
 
@@ -37,7 +38,7 @@ missing = args.missing.lower() if args.missing else args.missing
 # print("MISSING",missing)
 
 driver = get_chrome_webdriver()
-scraper = Scraper(driver, url, StreamServers.MP4UPLOAD)
+scraper = Scraper(driver, url, UserConfig.STREAM_SERVER)
 
 episode_dict = scraper.fetch_episode_list()
 episode_numbers = [extract_episode_number(ep) for ep in episode_dict]
@@ -152,5 +153,5 @@ if not skip_auto_add:
     print("Adding episodes to", str(downloader))
 
     for episode_name, urls in meta_data["Episodes"].items():
-        print(os.getcwd(), episode_name, urls["stream_url"])
+        # print(os.getcwd(), episode_name, urls["stream_url"])
         downloader.add_to_queue(os.getcwd(), episode_name, urls["stream_url"])
