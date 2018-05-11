@@ -1,7 +1,7 @@
 # Fetching ep lists:
 
 # Get all hyperlinks in episode list
-# Check if the text is truthy
+# Filter out truthy episodes
 # Go to page
 # Select server
 # Do your thing
@@ -11,6 +11,7 @@ from src.scrape_utils.servers import StreamServers
 from src.stream_servers.openupload import OpenUploadScraper
 from src.stream_servers.mp4upload import Mp4UploadScraper
 from src.stream_servers.yourupload import YourUploadScraper
+from src.utils import printing
 from src.utils.timeout import call_till_true
 from src.utils import sort_nicely, printd
 
@@ -40,6 +41,7 @@ class Scraper():
             return self.episodes_dict
 
         printd("fetching episode list")
+        printing.fetching_list(self.anime_url)
         driver = self.driver
         
         ep_list_container = driver.find_element_by_css_selector(KickassAnimeSelectors.EPISODE_LIST)
@@ -89,13 +91,19 @@ class Scraper():
     def fetch_episode(self, episode_name):
         # -> { stream_page: http://.../watch/episode-01, stream_url: http://.../file.mp4 } 
 
-        printd("Fetching", episode_name)
-
         if episode_name in self.episodes_dict:
             stream_page = self.episodes_dict[episode_name]
+            
+            printd("Fetching", episode_name)
+            printing.fetching_episode(episode_name, stream_page)
+
             stream_url = self.server_scraper.fetch_stream_url(stream_page)
-            printd({ "stream_page": stream_page, "stream_url": stream_url  })
-            return { "stream_page": stream_page, "stream_url": stream_url  }
+            result = { "stream_page": stream_page, "stream_url": stream_url  }
+
+            printd(result)
+            printing.fetched_episode(episode_name, stream_url, True if stream_url else False)
+
+            return result
         
         raise ValueError("%s does not exist" % episode_name)
 
