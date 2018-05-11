@@ -58,7 +58,8 @@ sudo chmod +x /usr/bin/chromedriver
 1. Download the [Chrome Webdriver](https://sites.google.com/a/chromium.org/chromedriver/downloads)
 2. Place it in `C:/webdrivers` (or where ever you want)
 3. Add `C:/webdrivers` to system environment variable PATH  (# TODO: Make this step optional through config.py)
-4. Make sure your Internet Download Manager installation directory (the one in which idman.exe sits) is added to PATH
+4. Make sure your Internet Download Manager installation directory (the one in which idman.exe sits) is added to PATH or anime-scraper can't add downloads automatically to IDM.
+5. Add anime-scraper repository directory to path. This allows you to run the command `scrape` in any directory.
 
 ## Usage
 The usage is pretty much the same as the previous version:
@@ -82,13 +83,15 @@ optional arguments:
                         current directory as the download location
 ```
 
-So to fetch episodes 2, 6 and everything that lies in between:
+So if I wanted to fetch episodes 2, 6 and everything that lies in between for myself I'd:
 
-`python scrape.py https://www.kickassanime.ru/anime/clannad -s 2 -e 6`
+`mkdir Clannad ; cd Clannad`  (optional, this is just to keep everything organzed)
+
+`scrape https://www.kickassanime.ru/anime/clannad -s 2 -e 6`
 
 To automatically add the downloads to IDM/uGet:
 
-`python scrape.py https://www.kickassanime.ru/anime/clannad -s 2 -e 6 -a`
+`scrape https://www.kickassanime.ru/anime/clannad -s 2 -e 6 -a`
 
 # Bye Bye
 That's pretty much it. Feel free to contribute by fixing/reporting bugs and/or expanding anime-scraper. Cheers.
