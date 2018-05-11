@@ -89,3 +89,5 @@ To automatically add the downloads to IDM/uGet:
 
 `python scrape.py https://www.kickassanime.ru/anime/clannad -s 2 -e 6 -a`
 
+# Bye Bye
+That's pretty much it. Feel free to contribute by fixing/reporting bugs and/or expanding anime-scraper. Cheers.
