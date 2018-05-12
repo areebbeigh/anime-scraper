@@ -24,7 +24,7 @@ class uGet:
         """
         Uses the uGet comand line interface to add files to the main download queue
         """
-        command = 'uget-gtk --quiet --folder="{1}" --filename="{2}" "{0}"'.format(url, directory, filename)
+        command = 'nohup uget-gtk --quiet --folder="{1}" --filename="{2}" "{0}" &'.format(url, directory, filename)
         printd(command)
         os.system(command)
 
