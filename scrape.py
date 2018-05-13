@@ -156,4 +156,4 @@ if not skip_auto_add:
 
     for episode_name, urls in meta_data["Episodes"].items():
         # print(os.getcwd(), episode_name, urls["stream_url"])
-        downloader.add_to_queue(os.getcwd(), episode_name, urls["stream_url"])
+        downloader.add_to_queue(os.getcwd(), episode_name + ".mp4", urls["stream_url"])
