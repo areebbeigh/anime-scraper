@@ -5,6 +5,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.common.keys import Keys
 
+from src.config import TimeoutConfig
 from . import printd
 from .timeout import call_till_true
 
@@ -59,7 +60,7 @@ def get_chrome_webdriver():
     def tab_count_reached(webdriver):
         return len(webdriver.window_handles) >= EXPECTED_EXTRA_TABS + 1
 
-    res, calls, success = call_till_true(tab_count_reached, 5, driver)
+    res, calls, success = call_till_true(tab_count_reached, TimeoutConfig.KILLING_EXTRA_TABS, driver)
     
     if success:
         printd("calls", calls)

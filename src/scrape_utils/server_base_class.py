@@ -1,7 +1,10 @@
+from src.config import TimeoutConfig
+
 class BaseServerScraper:
     def __init__(self, webdriver, selectors):
         self.driver = webdriver
         self.selectors = selectors
+        self.episode_fetch_timeout = TimeoutConfig.FETCHING_EPISODE_STREAM
 
     def search_url_in_perflogs(self, regex_objects):
         """

@@ -62,7 +62,7 @@ class YourUploadScraper(BaseServerScraper):
                 return True
             return False
 
-        res, calls, success = call_till_true(is_document_loaded, 10, driver)
+        res, calls, success = call_till_true(is_document_loaded, self.episode_fetch_timeout, driver)
 
         printd("outside wait loop ;", "success:", success, "calls:", calls)
         

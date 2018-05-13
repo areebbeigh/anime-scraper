@@ -1,11 +1,4 @@
-# Fetching ep lists:
-
-# Get all hyperlinks in episode list
-# Filter out truthy episodes
-# Go to page
-# Select server
-# Do your thing
-
+from src.config import TimeoutConfig
 from src.scrape_utils.selectors import KickassAnimeSelectors, LOAD_STATUS_SELECTOR
 from src.scrape_utils.servers import StreamServers
 from src.stream_servers.openupload import OpenUploadScraper
@@ -51,7 +44,7 @@ class Scraper():
 
         # Sometimes the episode list takes a while to load and we fetch_ep_list gets 0 episodes
         # call_till_true will keep trying for n seconds till we get >0 episodes
-        ep_list, calls, success = call_till_true(fetch_ep_list, 10, ep_list_container)
+        ep_list, calls, success = call_till_true(fetch_ep_list, TimeoutConfig.FETCHING_EPISODE_LIST, ep_list_container)
         
         if not success:
             # TODO: Change error raised
