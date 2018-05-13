@@ -87,9 +87,13 @@ optional arguments:
                         current directory as the download location
 ```
 
-So if I wanted to fetch episodes 2, 6 and everything that lies in between for myself I'd:
-
 `mkdir Clannad ; cd Clannad`  (optional, this is just to keep everything organzed)
+
+For all episodes:
+
+`scrape.py https://www.kickassanime.ru/anime/clannad`
+
+If I wanted to fetch episodes 2, 6 and everything that lies in between for myself I'd:
 
 `scrape.py https://www.kickassanime.ru/anime/clannad -s 2 -e 6`
 
