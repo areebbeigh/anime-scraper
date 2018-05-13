@@ -3,11 +3,11 @@ Scrape and add anime episode stream URLs to uGet (Linux) or IDM (Windows).
 
 ## Motivation for v3
 Let me take a moment to explain the upgrade to v3. If you were a regular user of anime-scraper before (upto any version v2)
-you probably noticed that it broke very often. The reason was because of the frequent DOM manipulation of the supported websites or of the video hosting websites. In an attempt to avoid this breakage to some extent I've implemented a new scraping method in this version of anime-scraper. 
+you probably noticed that it broke very often. The reason was because of the frequent DOM updation of the supported websites or of the video hosting websites. In an attempt to avoid this breakage to some extent I've implemented a new scraping method in this version of anime-scraper. 
 
 How it works:
 
-anime-scraper now uses Selenium (with Google Chrome, for now) to scrape episode download URLs. While it still depends on the streaming website's DOM structure to some extent, the code structure aims to be a lot more maintainable and expandable than before. Also, instead of extracting the stream URLs from the minimised JavaScript files from the hosting services, anime-scraper extracts the download URLs from the network file exchanges, which makes the overall scrapping process less nested.
+anime-scraper now uses Selenium (with Google Chrome, for now) to scrape episode download URLs. While it still depends on the streaming website's DOM structure to some extent, the code structure aims to be a lot more maintainable and expandable than before. Also, instead of extracting the stream URLs from the minimised JavaScript files from the hosting services, anime-scraper extracts the download URLs from the network file exchange logs, which makes the overall scrapping process less nested.
 
 The disadvantage:
 
