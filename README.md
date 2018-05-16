@@ -86,6 +86,8 @@ optional arguments:
   --auto, -a            Automatically add the downloads to IDM using the
                         current directory as the download location
 ```
+### Example
+For fetching Clannad:
 
 `mkdir Clannad ; cd Clannad`  (optional, this is just to keep everything organzed)
 
@@ -93,9 +95,17 @@ For all episodes:
 
 `scrape.py https://www.kickassanime.ru/anime/clannad`
 
-If I wanted to fetch episodes 2, 6 and everything that lies in between for myself I'd:
+If I want to fetch episodes 2, 6 and everything that lies in between for myself I'd:
 
 `scrape.py https://www.kickassanime.ru/anime/clannad -s 2 -e 6`
+
+To fetch episodes that are missing from the current directory:
+
+`scrape.py https://www.kickassanime.ru/anime/clannad -m files`
+
+To fetch episodes that are missing from the scraping metadata (metadata.json):
+
+`scrape.py https://www.kickassanime.ru/anime/clannad -m metadata`
 
 To automatically add the downloads to IDM/uGet:
 
