@@ -1,29 +1,17 @@
 // Not a part of jQuery on-mutate
 
-player_selector = ".load-vid"
-
-function updateLoadStatus(status) {
-    load_status = {
-        iframe_loaded: status
-    };
-
-    $("#load_status").html(JSON.stringify(load_status));
-}
-
-function createElement() {
-    var element = document.createElement('div');
-    element.id = "load_status";
-    document.body.appendChild(element);
-    updateLoadStatus(0);
-}
+var player_selector = [
+    ".load-vid", // KickAssAnime
+    "#load_anime" // GoGoAnime
+];
 
 function initiateTracker() {
     $(player_selector).onCreate('iframe', function (iframeElement) {
         console.log("iframe created");
 
         $(iframeElement).on('load', function () {
-            already_loaded = false
-            updateLoadStatus(1);
+            var already_loaded = false
+            updateIframeLoadStatus(1);
             console.log("iframe loaded");
         });
     });
@@ -31,11 +19,10 @@ function initiateTracker() {
     console.log("tracker running");
 }
 
+// Decide on a player selector
+player_selector = player_selector.filter(selector => {
+    return $(selector).length;
+})[0];
 
-
-(function () {
-    createElement();
-    initiateTracker();
-})();
-
+initiateTracker();
 
