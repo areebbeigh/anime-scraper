@@ -135,6 +135,7 @@ Thanks a bunch to the developers.
 - Expand config.py
 - Add support for ~2~ 1 more sites
 - Reduce scrapping time
+- Contributing.md
 
 (no promises)
 
