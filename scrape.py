@@ -2,6 +2,7 @@
 
 import os
 import sys
+import re
 import json
 import time
 import platform
@@ -13,7 +14,8 @@ from argparse import ArgumentParser
 from src.utils.downloader_interface import IDM, uGet
 from src.utils.formatting import extract_episode_number
 from src.utils.webdriver import get_chrome_webdriver
-from src.websites.kickassanime import Scraper
+from src.websites.kickassanime import Scraper as KickassAnimeScraper
+from src.websites.gogoanime import Scraper as GoGoAnimeScraper
 from src.scrape_utils.servers import StreamServers
 from src.config import UserConfig, TimeoutConfig
 
@@ -40,6 +42,21 @@ missing = args.missing.lower() if args.missing else args.missing
 # print("MISSING",missing)
 
 driver = get_chrome_webdriver()
+
+patterns = {
+    "gogoanime": re.compile(r"(http:\/\/|https:\/\/)*([a-z0-9][a-z0-9\-]*\.)*(gogoanime)\..+(\/.+)"),
+    "kickassanime": re.compile(r"(http:\/\/|https:\/\/)*([a-z0-9][a-z0-9\-]*\.)*(kickassanime)\..+(\/.+)")
+}
+
+scraper_classes = {
+    "gogoanime": GoGoAnimeScraper,
+    "kickassanime": KickassAnimeScraper
+}
+
+for name, pattern in patterns.items():
+    if pattern.search(url):
+        Scraper = scraper_classes[name]
+
 scraper = Scraper(driver, url, UserConfig.STREAM_SERVER)
 
 episode_dict = scraper.fetch_episode_list()
@@ -93,7 +110,7 @@ elif missing == "metadata":
 if missing:
     for episode_num in episode_numbers:
         if episode_num not in downloaded_episode_numbers:
-            # print("missing episode", episode_num)
+            print("missing episode", episode_num)
             episode_numbers_to_fetch += [episode_num]
 
 fetched_episodes = OrderedDict()
