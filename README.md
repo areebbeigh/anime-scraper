@@ -120,18 +120,22 @@ in the configuration. You can choose an ideal stream server by opening the episo
 
 ## Supported websites
 - kickassanime.ru
+- gogoanime.se
 
 ## Not mine
 anime-scraper uses the following additional "resources":
 
-- [jQuery onMutate](https://github.com/eclecto/jQuery-onMutate) by [electro](https://github.com/eclecto)
+- [jQuery](http://jquery.com)
+- [jQuery onMutate](https://github.com/eclecto/jQuery-onMutate)
 - [Pop Up Blocker](http://www.poperblocker.com/) Chrome extension
 
 Thanks a bunch to the developers.
 
 ## TODO 
 - Expand config.py
-- Add support for 2 more sites
+- Add support for ~2~ 1 more sites
+- Reduce scrapping time
+- Contributing.md
 
 (no promises)
 
