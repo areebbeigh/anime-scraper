@@ -110,7 +110,7 @@ elif missing == "metadata":
 if missing:
     for episode_num in episode_numbers:
         if episode_num not in downloaded_episode_numbers:
-            print("missing episode", episode_num)
+            print("Missing episode", episode_num)
             episode_numbers_to_fetch += [episode_num]
 
 fetched_episodes = OrderedDict()

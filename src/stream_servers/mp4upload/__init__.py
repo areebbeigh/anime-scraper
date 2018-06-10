@@ -42,7 +42,7 @@ class Mp4UploadScraper(BaseServerScraper):
         # Choose mp4upload as streaming server
         if self.selectors != KickassAnimeSelectors:
             # Kickassanime uses MP4Upload by default
-            print("clicking")
+            # print("clicking")
             driver.find_element_by_css_selector(selectors.MP4UPLOAD).click()
 
         player = driver.find_element_by_css_selector(selectors.PLAYER)
