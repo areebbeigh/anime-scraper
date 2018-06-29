@@ -24,6 +24,7 @@ debug.log
 __pycache__
 metadata.json 
 scrape.log
+perf logs.txt
 
 # Windows image file caches
 Thumbs.db

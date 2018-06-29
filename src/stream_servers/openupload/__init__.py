@@ -43,8 +43,9 @@ class OpenUploadScraper(BaseServerScraper):
         # Choose openupload as streaming server
         # GoGoAnime has 2 open upload buttons. First one's broken.
         openupload_buttons = driver.find_elements_by_css_selector(selectors.OPENUPLOAD)
-        openupload_buttons = openupload_buttons[1] if len(openupload_buttons) > 1 else openupload_buttons[0]
-        openupload_buttons.click()
+        openupload_button = openupload_buttons[1] if len(openupload_buttons) > 1 else openupload_buttons[0]
+        openupload_button.click()
+        openupload_button.click() # First click doesn't register in some cases
 
         player = driver.find_element_by_css_selector(selectors.PLAYER)
         

@@ -40,16 +40,18 @@ class YourUploadScraper(BaseServerScraper):
         self._execute_js_scripts()
 
         # Choose yourupload as streaming server
-        driver.find_element_by_css_selector(selectors.YOURUPLOAD).click()
+        yourupload_button = driver.find_element_by_css_selector(selectors.YOURUPLOAD)
+        yourupload_button.click()
+        yourupload_button.click()
 
         player = driver.find_element_by_css_selector(selectors.PLAYER)
 
-        res, calls, success = call_till_true(is_document_loaded, self.episode_fetch_timeout, driver)
+        res, calls, success = call_till_true(is_iframe_loaded, self.episode_fetch_timeout, driver)
 
         printd("outside wait loop ;", "success:", success, "calls:", calls)
         
         # No need to click. YourUpload initiates the request during page load.
         # video = player.find_element_by_css_selector("video")
         # video.click()
-        
+
         return self.search_url_in_perflogs(self.regex_pattern_objects)

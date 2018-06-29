@@ -8,7 +8,7 @@ def is_document_loaded(webdriver):
     status = json.loads(status_raw)
     printd("waiting")
     if status["document_loaded"]:
-        printd("loaded")
+        printd("document loaded")
         return True
     return False
 

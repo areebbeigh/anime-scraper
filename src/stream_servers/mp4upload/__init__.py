@@ -38,25 +38,28 @@ class Mp4UploadScraper(BaseServerScraper):
         driver = self.driver
         
         driver.get(stream_page)
-
-        # Choose mp4upload as streaming server
-        if self.selectors != KickassAnimeSelectors:
-            # Kickassanime uses MP4Upload by default
-            # print("clicking")
-            driver.find_element_by_css_selector(selectors.MP4UPLOAD).click()
-
-        player = driver.find_element_by_css_selector(selectors.PLAYER)
         self._execute_js_scripts()
 
-        if self.selectors != KickassAnimeSelectors:
-            res, calls, success = call_till_true(is_iframe_loaded, self.episode_fetch_timeout, driver)
-        else:
-            res, calls, success = call_till_true(is_document_loaded, self.episode_fetch_timeout, driver)
+        # Choose mp4upload as streaming server
+        # if self.selectors != KickassAnimeSelectors:
+        #     # Kickassanime uses MP4Upload by default
+        #     # print("clicking")
 
-        printd("outside wait loop ;", "success:", success, "calls:", calls)
+        mp4upload_button = driver.find_element_by_css_selector(selectors.MP4UPLOAD)
+        mp4upload_button.click()
+        mp4upload_button.click()
         
-        # No need to click. MP4Upload initiates the request during page load.
-        # video = player.find_element_by_css_selector("video")
-        # video.click()
+        player = driver.find_element_by_css_selector(selectors.PLAYER)
+
+        # if self.selectors != KickassAnimeSelectors:
+        #     res, calls, success = call_till_true(is_iframe_loaded, self.episode_fetch_timeout, driver)
+        # else:
+        #     res, calls, success = call_till_true(is_document_loaded, self.episode_fetch_timeout, driver)
+
+        res, calls, success = call_till_true(is_iframe_loaded, self.episode_fetch_timeout, driver)
+        printd("outside wait loop ;", "success:", success, "calls:", calls)
+
+        iframe = player.find_element_by_css_selector("iframe")
+        iframe.click()
         
         return self.search_url_in_perflogs(self.regex_pattern_objects)

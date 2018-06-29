@@ -35,6 +35,10 @@ class BaseServerScraper:
         regular expression for the server.
         """
         perf_logs = str(self.driver.get_log('performance'))
+        
+        # with open("perf logs.txt", "w") as f:
+        #     f.write(perf_logs)
+
         for obj in regex_objects:
             search_result = obj.search(perf_logs)
             if search_result:

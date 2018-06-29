@@ -1,3 +1,8 @@
+import time
+
+import cfscrape
+from bs4 import BeautifulSoup as bs
+
 from src.config import TimeoutConfig
 from src.scrape_utils.selectors import KickassAnimeSelectors, LOAD_STATUS_SELECTOR
 from src.scrape_utils.servers import StreamServers
@@ -14,8 +19,14 @@ class Scraper:
         self.driver = webdriver
         self.anime_url = url
         self.server = server
-        
+        self.cfscraper = cfscrape.create_scraper()
+
+        # TODO: Find a better way to bypass CF
+        # bypassing cloudflare 
         self.driver.get(self.anime_url)
+        time.sleep(5)
+        self.driver.get(self.anime_url)
+
         self.episodes_dict = {}
         self.episodes_dict = self.fetch_episode_list()
         self.server_scraper = self._get_server_scraper()
@@ -37,29 +48,36 @@ class Scraper:
         printing.fetching_list(self.anime_url)
         driver = self.driver
         
-        ep_list_container = driver.find_element_by_css_selector(KickassAnimeSelectors.EPISODE_LIST)
+        # ep_list_container = driver.find_element_by_css_selector(KickassAnimeSelectors.EPISODE_LIST)
 
-        def fetch_ep_list(container):
-            return container.find_elements_by_css_selector(KickassAnimeSelectors.EPISODE)
+        # def fetch_ep_list(container):
+        #     return container.find_elements_by_css_selector(KickassAnimeSelectors.EPISODE)
 
-        # Sometimes the episode list takes a while to load and we fetch_ep_list gets 0 episodes
-        # call_till_true will keep trying for n seconds till we get >0 episodes
-        ep_list, calls, success = call_till_true(fetch_ep_list, TimeoutConfig.FETCHING_EPISODE_LIST, ep_list_container)
-        
-        if not success:
-            # TODO: Change error raised
-            raise ValueError("Failed to fetch episode list")
+        # # Sometimes the episode list takes a while to load and we fetch_ep_list gets 0 episodes
+        # # call_till_true will keep trying for n seconds till we get >0 episodes
+        # ep_list, calls, success = call_till_true(fetch_ep_list, TimeoutConfig.FETCHING_EPISODE_LIST, ep_list_container)
+        # printd(ep_list)
+        # if not success:
+        #     # TODO: Change error raised
+        #     raise ValueError("Failed to fetch episode list")
 
-        printd("calls", calls)
+        # printd("calls", calls)
         # print(ep_list_container.text)
         # print(len(ep_list))
+
+        source = self.cfscraper.get(self.anime_url).content
+        soup = bs(source)
+        ep_list = soup.select(KickassAnimeSelectors.EPISODE_LIST)[0].select(KickassAnimeSelectors.EPISODE)
 
         ep_dict = {}
 
         for ep in ep_list:
-            if ep.text:
-                ep_dict[ep.text] = ep.get_attribute("href")
-        # print(ep_dict)
+            if ep.text and ep.text not in ep_dict:
+                ep_name = ep.text
+                ep_page = ep["href"]
+                ep_dict[ep_name] = ep_page
+
+        printd(ep_dict)
         return ep_dict
 
     def fetch_metadata(self):
@@ -92,6 +110,7 @@ class Scraper:
             # stream_url = self.server_scraper.fetch_stream_url(stream_page)
             try:
                 stream_url = self.server_scraper.fetch_stream_url(stream_page)
+                printd("stream_url", stream_url)
             except:
                 stream_url = ""
             result = { "stream_page": stream_page, "stream_url": stream_url  }
