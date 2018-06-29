@@ -23,7 +23,7 @@ If you're still reading, you deserve to know my real motivation behind the rewri
 
 `git clone https://github.com/areebbeigh/anime-scraper.git`
 
-`pip install selenium`
+`pip install -r requirements.txt`
 
 ### Ubuntu
 

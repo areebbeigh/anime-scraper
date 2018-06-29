@@ -66,7 +66,7 @@ class Scraper:
         # print(len(ep_list))
 
         source = self.cfscraper.get(self.anime_url).content
-        soup = bs(source)
+        soup = bs(source, "lxml")
         ep_list = soup.select(KickassAnimeSelectors.EPISODE_LIST)[0].select(KickassAnimeSelectors.EPISODE)
 
         ep_dict = {}
