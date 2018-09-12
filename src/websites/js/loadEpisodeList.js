@@ -13,7 +13,7 @@ function createElement() {
     updateLoadStatus(0);
 }
 
-var base_url = 'https://' + document.domain + '/';
+var base_url = 'https://' + 'api.watchanime.cc' + '/';
 const EPISODE_CONTAINER_ID = 'episode_list';
 
 function createEpisodesContainer() {
@@ -37,7 +37,7 @@ function loadEpisodeList() {
             var id = $('input#movie_id').val();
             var default_ep = $('input#default_ep').val();
 
-            var url = base_url + '/load-list-episode?ep_start=' + ep_start + '&ep_end=' + ep_end + '&id=' + id + '&default_ep=' + default_ep;
+            var url = base_url + 'ajax/load-list-episode?ep_start=' + ep_start + '&ep_end=' + ep_end + '&id=' + id + '&default_ep=' + default_ep;
 
             // $('#' + EPISODE_CONTAINER_ID).load(url);
 
