@@ -1,11 +1,14 @@
 import os
+
 from src.config import TimeoutConfig
+from src.utils import printd
 
 class BaseServerScraper:
-    def __init__(self, webdriver, selectors):
-        self.driver = webdriver
-        self.previos_urls = []
+    def __init__(self, driver, proxy, selectors):
+        self.driver = driver
+        self.proxy = proxy
         self.selectors = selectors
+        self.previos_urls = []
         self.episode_fetch_timeout = TimeoutConfig.FETCHING_EPISODE_STREAM
 
     def _execute_js_scripts(self):
@@ -15,6 +18,7 @@ class BaseServerScraper:
         jquery_js = os.path.join(js_libs, "jquery-3.3.1.min.js")
         jquery_onMutate_js = os.path.join(js_libs, "jquery.onmutate.min.js")
         trackIframe_js = os.path.join(js_libs, "trackIframe.js")
+        removeBanner_js = os.path.join(js_libs, "removeBanner.js")
 
         with open(loadStatus_js, "r") as f:
             loadStatus = f.read()
@@ -28,31 +32,27 @@ class BaseServerScraper:
         with open(trackIframe_js, "r") as f:
             trackIframe = f.read()
         
-        self.driver.execute_script(jquery + jquery_onMutate + loadStatus + trackIframe)
+        with open(removeBanner_js, "r") as f:
+            removeBanner = f.read()
+        
+        self.driver.execute_script(jquery + jquery_onMutate + loadStatus + trackIframe + removeBanner)
 
     def search_url_in_perflogs(self, regex_objects):
         """
         Access driver performance logs and find the stream URL by matching with the
         regular expression for the server.
         """
-        complete_perf_logs = str(self.driver.get_log('performance'))
-        perf_logs = complete_perf_logs
 
-        # Replacing previously fetched URLs from performance logs.
-        # In some cases, regex search was returning previously fetched URLs.
-        for previous_url in self.previos_urls:
-            perf_logs = perf_logs.replace(previous_url, "")
+        proxy = self.proxy.proxy
 
-        # with open("perf logs.txt", "w") as f:
-        #     f.write(perf_logs)
-
-        for obj in regex_objects:
-            search_result = obj.search(perf_logs)
-            if search_result:
-                url = search_result.group(0).replace("\"", "").replace("'", "")
-                self.previos_urls += [url]
-                # print(self.previos_urls)
-                return url
+        for entry in reversed(proxy.har['log']['entries']):
+            url = entry['request']['url']
+            printd(url, self.previos_urls)
+            if url not in self.previos_urls:
+                for regex in regex_objects:
+                    if regex.match(url):
+                        self.previos_urls.append(url)
+                        return url
         
         return ""
 

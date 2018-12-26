@@ -13,14 +13,13 @@ from argparse import ArgumentParser
 
 from src.utils.downloader_interface import IDM, uGet
 from src.utils.formatting import extract_episode_number
-from src.utils.webdriver import get_chrome_webdriver
+from src.utils.webdriver import get_chrome_webdriver, get_proxy
 from src.websites.kickassanime import Scraper as KickassAnimeScraper
 from src.websites.gogoanime import Scraper as GoGoAnimeScraper
 from src.scrape_utils.servers import StreamServers
 from src.config import UserConfig, TimeoutConfig
 
 # TODO: Catch errors
-
 start_time = time.time()
 
 parser = ArgumentParser()
@@ -41,7 +40,8 @@ missing = args.missing.lower() if args.missing else args.missing
 
 # print("MISSING",missing)
 
-driver = get_chrome_webdriver()
+proxy = get_proxy()
+driver = get_chrome_webdriver(proxy)
 
 patterns = {
     "gogoanime": re.compile(r"(http:\/\/|https:\/\/)*([a-z0-9][a-z0-9\-]*\.)*(gogoanime)\..+(\/.+)"),
@@ -57,7 +57,7 @@ for name, pattern in patterns.items():
     if pattern.search(url):
         Scraper = scraper_classes[name]
 
-scraper = Scraper(driver, url, UserConfig.STREAM_SERVER)
+scraper = Scraper(webdriver=driver, proxy=proxy, url=url, server=UserConfig.STREAM_SERVER)
 
 episode_dict = scraper.fetch_episode_list()
 episode_numbers = [extract_episode_number(ep) for ep in episode_dict]
@@ -123,6 +123,7 @@ for ep_number in episode_numbers_to_fetch:
     fetched_episodes["Episode " + str(ep_number)] = scraper.fetch_episode_number(ep_number)
 
 driver.close()
+proxy.close()
 
 failed = []
 

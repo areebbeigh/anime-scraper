@@ -12,15 +12,14 @@ from src.stream_servers.yourupload import YourUploadScraper
 from src.utils import printing
 from src.utils.timeout import call_till_true
 from src.utils import sort_nicely, printd
+from .base_scraper import BaseScraper
 
 
-class Scraper:
-    def __init__(self, webdriver, url, server):
-        self.driver = webdriver
-        self.anime_url = url
-        self.server = server
+class Scraper(BaseScraper):
+    def __init__(self, **kwargs):
+        super(Scraper, self).__init__(**kwargs)
         self.cfscraper = cfscrape.create_scraper()
-
+        self.server_scraper = self._get_server_scraper()
         # TODO: Find a better way to bypass CF
         # bypassing cloudflare 
         self.driver.get(self.anime_url)
@@ -29,16 +28,19 @@ class Scraper:
 
         self.episodes_dict = {}
         self.episodes_dict = self.fetch_episode_list()
-        self.server_scraper = self._get_server_scraper()
 
     def _get_server_scraper(self):
         scrapers = {
-            StreamServers.OPENUPLOAD: OpenUploadScraper(self.driver, KickassAnimeSelectors),
-            StreamServers.MP4UPLOAD: Mp4UploadScraper(self.driver, KickassAnimeSelectors),
-            StreamServers.YOURUPLOAD: YourUploadScraper(self.driver, KickassAnimeSelectors)
+            StreamServers.OPENUPLOAD: OpenUploadScraper(
+                self.driver, self.proxy, KickassAnimeSelectors),
+            StreamServers.MP4UPLOAD: Mp4UploadScraper(
+                self.driver, self.proxy, KickassAnimeSelectors),
+            StreamServers.YOURUPLOAD: YourUploadScraper(
+                self.driver, self.proxy, KickassAnimeSelectors)
         }
+        
         return scrapers[self.server]
-    
+
     def fetch_episode_list(self):
         # -> { 'Episode 1': 'https://www.kickassanime.ru/anime/gintama/episode-1', ... }
         if self.episodes_dict:
@@ -110,9 +112,10 @@ class Scraper:
             # stream_url = self.server_scraper.fetch_stream_url(stream_page)
             try:
                 stream_url = self.server_scraper.fetch_stream_url(stream_page)
-                printd("stream_url", stream_url)
-            except:
+            except Exception as err:
+                printd(err)
                 stream_url = ""
+
             result = { "stream_page": stream_page, "stream_url": stream_url  }
 
             printd(result)

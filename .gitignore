@@ -1,5 +1,7 @@
 pdl.py
 *.pyc
+*.log
+testing_proxy.py
 
 # virtualenv
 Include

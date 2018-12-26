@@ -1,4 +1,6 @@
+import os
 from src.scrape_utils.servers import StreamServers
+
 
 class UserConfig:
     DEBUG_MESSAGES = False
@@ -10,3 +12,7 @@ class TimeoutConfig:
     FETCHING_EPISODE_LIST = 15
     FETCHING_EPISODE_STREAM = 15
     KILLING_EXTRA_TABS = 5
+
+
+class BrowserMobProxyConfig:
+    binary = os.path.join(os.path.dirname(__file__), "../browsermob-proxy/bin/browsermob-proxy")

@@ -12,8 +12,8 @@ function createElement() {
     document.body.appendChild(element);
     updateLoadStatus(0);
 }
-
-var base_url = 'https://' + 'api.watchanime.cc' + '/';
+// https://ajax.apimovie.xyz/ajax/load-list-episode?ep_start=0&ep_end=24&id=573&default_ep=0&alias=clannad
+var base_url = 'https://' + 'ajax.apimovie.xyz' + '/';
 const EPISODE_CONTAINER_ID = 'episode_list';
 
 function createEpisodesContainer() {

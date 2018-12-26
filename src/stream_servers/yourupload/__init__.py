@@ -14,8 +14,8 @@ from src.scrape_utils.is_loaded import is_document_loaded, is_iframe_loaded
 
 
 class YourUploadScraper(BaseServerScraper):
-    def __init__(self, webdriver, selectors):
-        BaseServerScraper.__init__(self, webdriver, selectors)
+    def __init__(self, driver, proxy, selectors):
+        BaseServerScraper.__init__(self, driver, proxy, selectors)
         self.regex_pattern_objects = get_stream_url_regex(StreamServers.YOURUPLOAD)
 
     # def _execute_js_scripts(self):

@@ -13,26 +13,10 @@ from src.scrape_utils.selectors import KickassAnimeSelectors
 from src.scrape_utils.is_loaded import is_document_loaded, is_iframe_loaded
 
 class Mp4UploadScraper(BaseServerScraper):
-    def __init__(self, webdriver, selectors):
-        BaseServerScraper.__init__(self, webdriver, selectors)
+    def __init__(self, driver, proxy, selectors):
+        BaseServerScraper.__init__(self, driver, proxy, selectors)
         self.regex_pattern_objects = get_stream_url_regex(StreamServers.MP4UPLOAD)
 
-    # def _execute_js_scripts(self):
-    #     js_libs = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "js")
-    #     onDocLoad_js = os.path.join(js_libs, "onDocumentLoad.js")
-    #     trackIframe_js = os.path.join(js_libs, "trackIframe.js")
-        
-    #     with open(trackIframe_js, "r") as f:
-    #         trackIframe = f.read()
-
-    #     with open(onDocLoad_js, "r") as f:
-    #         onDocLoad = f.read()
-        
-    #     self.driver.execute_script(onDocLoad)
-
-    #     if self.selectors != KickassAnimeSelectors:
-    #         self.driver.execute_script(trackIframe)
-    
     def fetch_stream_url(self, stream_page):
         selectors = self.selectors
         driver = self.driver
@@ -50,11 +34,6 @@ class Mp4UploadScraper(BaseServerScraper):
         mp4upload_button.click()
         
         player = driver.find_element_by_css_selector(selectors.PLAYER)
-
-        # if self.selectors != KickassAnimeSelectors:
-        #     res, calls, success = call_till_true(is_iframe_loaded, self.episode_fetch_timeout, driver)
-        # else:
-        #     res, calls, success = call_till_true(is_document_loaded, self.episode_fetch_timeout, driver)
 
         res, calls, success = call_till_true(is_iframe_loaded, self.episode_fetch_timeout, driver)
         printd("outside wait loop ;", "success:", success, "calls:", calls)

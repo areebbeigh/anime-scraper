@@ -10,14 +10,12 @@ from src.stream_servers.yourupload import YourUploadScraper
 from src.utils import printing
 from src.utils.timeout import call_till_true
 from src.utils import sort_nicely, printd
+from .base_scraper import BaseScraper
 
 
-class Scraper:
-    def __init__(self, webdriver, url, server):
-        self.driver = webdriver
-        self.anime_url = url
-        self.server = server
-
+class Scraper(BaseScraper):
+    def __init__(self, **kwargs):
+        super(Scraper, self).__init__(**kwargs)
         self.driver.get(self.anime_url)
         self.episodes_dict = {}
         self.episodes_dict = self.fetch_episode_list()
@@ -25,11 +23,14 @@ class Scraper:
 
     def _get_server_scraper(self):
         scrapers = {
-            StreamServers.OPENUPLOAD: OpenUploadScraper(self.driver, GoGoAnimeSelectors),
-            StreamServers.MP4UPLOAD: Mp4UploadScraper(self.driver, GoGoAnimeSelectors),
+            StreamServers.OPENUPLOAD: OpenUploadScraper(
+                self.driver, self.proxy, GoGoAnimeSelectors),
+            StreamServers.MP4UPLOAD: Mp4UploadScraper(
+                self.driver, self.proxy, GoGoAnimeSelectors),
             StreamServers.YOURUPLOAD: YourUploadScraper(
-                self.driver, GoGoAnimeSelectors)
+                self.driver, self.proxy, GoGoAnimeSelectors)
         }
+        
         return scrapers[self.server]
 
     def _execute_js_scripts(self):
@@ -82,7 +83,7 @@ class Scraper:
 
     def fetch_episode(self, episode_name):
         # -> { stream_page: http://.../watch/episode-01, stream_url: http://.../file.mp4 }
-
+        
         if episode_name in self.episodes_dict:
             stream_page = self.episodes_dict[episode_name]
 
@@ -91,8 +92,10 @@ class Scraper:
             # stream_url = self.server_scraper.fetch_stream_url(stream_page)
             try:
                 stream_url = self.server_scraper.fetch_stream_url(stream_page)
-            except:
+            except Exception as err:
+                printd(err)
                 stream_url = ""
+
             result = {"stream_page": stream_page, "stream_url": stream_url}
 
             printd(result)
