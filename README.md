@@ -128,6 +128,7 @@ anime-scraper uses the following additional "resources":
 - [jQuery](http://jquery.com)
 - [jQuery onMutate](https://github.com/eclecto/jQuery-onMutate)
 - [Pop Up Blocker](http://www.poperblocker.com/) Chrome extension
+- [Browsermob Proxy](https://github.com/lightbody/browsermob-proxy)
 
 Thanks a bunch to the developers.
 
@@ -136,6 +137,7 @@ Thanks a bunch to the developers.
 - Add support for ~2~ 1 more sites
 - Reduce scrapping time
 - Contributing.md
+- **This implementation is still kinda hacky and breaks from time to time. Come up with a more robust scraping method.**
 
 (no promises)
 
